@@ -35,11 +35,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("JTetris");
 
-        var canvas = new Canvas(BOARD_WIDTH, BOARD_HEIGHT);
-        canvas.setFocusTraversable(true);
-        canvas.setOnKeyPressed(e -> Main.keyPresses.add(e.getCode()));
+        var gameCanvas = new Canvas(BOARD_WIDTH, BOARD_HEIGHT);
+        gameCanvas.setFocusTraversable(true);
+        gameCanvas.setOnKeyPressed(e -> Main.keyPresses.add(e.getCode()));
 
-        var graphicsContext = canvas.getGraphicsContext2D();
+        var graphicsContext = gameCanvas.getGraphicsContext2D();
 
         // This will run the 'update' method 60 times per second
         // "sixty frames per second"
@@ -57,7 +57,7 @@ public class Main extends Application {
         moveDownAnimationLoop.play();
 
         var pane = new StackPane();
-        pane.getChildren().add(canvas);
+        pane.getChildren().add(gameCanvas);
         var scene = new Scene(pane, BOARD_WIDTH, BOARD_HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
