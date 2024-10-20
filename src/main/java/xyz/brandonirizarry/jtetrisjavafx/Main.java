@@ -83,7 +83,6 @@ public class Main extends Application {
         var lostGame = game.sendNextPieceIfReady();
 
         if (lostGame) {
-           // System.out.println("Game Over");
             return;
         }
 
@@ -100,7 +99,6 @@ public class Main extends Application {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
         if (keyPress == null) {
-            //  game.moveDown();
             return;
         }
 
