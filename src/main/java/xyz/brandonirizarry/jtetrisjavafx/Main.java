@@ -27,17 +27,6 @@ public class Main extends Application {
     private static final Game game = new Game(NUM_ROWS, NUM_COLUMNS);
     private static final Queue<KeyCode> keyPresses = new ArrayDeque<>();
 
-    public static void schedule(long time, Runnable callback) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(time);
-                callback.run();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
     public static void main(String[] args) {
         launch(args);
     }
