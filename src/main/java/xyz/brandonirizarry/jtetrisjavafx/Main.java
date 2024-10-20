@@ -43,18 +43,18 @@ public class Main extends Application {
 
         // This will run the 'update' method 60 times per second
         // "sixty frames per second"
-        var loop = new Timeline(
+        var mainAnimationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/30), e -> update(graphicsContext, Main.keyPresses.poll()))
         );
 
-        var loop2 = new Timeline(
+        var moveDownAnimationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/3), e -> game.moveDown())
         );
 
-        loop.setCycleCount(Animation.INDEFINITE);
-        loop2.setCycleCount(Animation.INDEFINITE);
-        loop.play();
-        loop2.play();
+        mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        moveDownAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        mainAnimationLoop.play();
+        moveDownAnimationLoop.play();
 
         var pane = new StackPane();
         pane.getChildren().add(canvas);
