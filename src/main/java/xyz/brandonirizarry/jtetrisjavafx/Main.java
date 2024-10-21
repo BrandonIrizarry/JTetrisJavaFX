@@ -44,9 +44,10 @@ public class Main extends Application {
         var sideCanvas = new Canvas(SIDE_WIDTH, BOARD_HEIGHT);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
 
-        var gamePane = new StackPane(gameCanvas);
-        var sidePane = new StackPane(sideCanvas);
-        var splitPane = new SplitPane(gamePane, sidePane);
+        var splitPane = new SplitPane(
+                new StackPane(gameCanvas),
+                new StackPane(sideCanvas)
+        );
 
         var scene = new Scene(splitPane, BOARD_WIDTH + SIDE_WIDTH, BOARD_HEIGHT);
         primaryStage.setScene(scene);
