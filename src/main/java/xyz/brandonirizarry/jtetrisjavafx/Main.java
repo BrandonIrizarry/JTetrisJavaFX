@@ -20,7 +20,7 @@ import java.util.Queue;
 public class Main extends Application {
     private static final int NUM_ROWS = 20;
     private static final int NUM_COLUMNS = 10;
-    private static final double SQUARE_UNIT = 50.0;
+    private static final double SQUARE_UNIT = 25.0;
     private static final double BOARD_HEIGHT = NUM_ROWS * SQUARE_UNIT;
     private static final double BOARD_WIDTH = NUM_COLUMNS * SQUARE_UNIT;
 
