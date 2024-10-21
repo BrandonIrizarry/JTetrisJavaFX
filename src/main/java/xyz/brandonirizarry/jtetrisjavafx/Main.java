@@ -33,8 +33,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("JTetris");
-
         var gameCanvas = new Canvas(BOARD_WIDTH, BOARD_HEIGHT);
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> Main.keyPresses.add(e.getCode()));
@@ -60,6 +58,7 @@ public class Main extends Application {
         pane.getChildren().add(gameCanvas);
         var scene = new Scene(pane, BOARD_WIDTH, BOARD_HEIGHT);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("JTetris");
         primaryStage.show();
     }
 
