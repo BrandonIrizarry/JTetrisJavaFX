@@ -39,24 +39,10 @@ public class Main extends Application {
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> Main.keyPresses.add(e.getCode()));
         var gameGraphicsContext = gameCanvas.getGraphicsContext2D();
+        configureAnimations(gameGraphicsContext);
 
         var sideCanvas = new Canvas(SIDE_WIDTH, BOARD_HEIGHT);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
-
-        // This will run the 'update' method 60 times per second
-        // "sixty frames per second"
-        var mainAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> update(gameGraphicsContext, Main.keyPresses.poll()))
-        );
-
-        var moveDownAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/3), e -> game.moveDown())
-        );
-
-        mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        moveDownAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        mainAnimationLoop.play();
-        moveDownAnimationLoop.play();
 
         var gamePane = new StackPane(gameCanvas);
         var sidePane = new StackPane(sideCanvas);
@@ -110,5 +96,21 @@ public class Main extends Application {
     private void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
         graphicsContext.setFill(color);
         graphicsContext.fillRect(columnIndex *  SQUARE_UNIT, rowIndex * SQUARE_UNIT, SQUARE_UNIT, SQUARE_UNIT);
+    }
+
+    private void configureAnimations(GraphicsContext graphicsContext) {
+        // This will run the 'update' method 60 times per second
+        var mainAnimationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/30), e -> update(graphicsContext, Main.keyPresses.poll()))
+        );
+
+        var moveDownAnimationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/3), e -> game.moveDown())
+        );
+
+        mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        moveDownAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        mainAnimationLoop.play();
+        moveDownAnimationLoop.play();
     }
 }
