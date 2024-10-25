@@ -58,11 +58,6 @@ public class Main extends Application {
         game.start();
     }
 
-    public void update(GraphicsContext graphicsContext, KeyCode keyPress) {
-        updatePlayerArea(graphicsContext);
-        handleKeyPress(keyPress);
-    }
-
     private void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
         graphicsContext.setFill(color);
         graphicsContext.fillRect(columnIndex *  SQUARE_UNIT, rowIndex * SQUARE_UNIT, SQUARE_UNIT, SQUARE_UNIT);
@@ -71,7 +66,10 @@ public class Main extends Application {
     private void configureAnimations(GraphicsContext graphicsContext) {
         // This will run the 'update' method 60 times per second
         var mainAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> update(graphicsContext, Main.keyPresses.poll()))
+                new KeyFrame(Duration.millis(1000.0/30), e -> {
+                    updatePlayerArea(graphicsContext);
+                    handleKeyPress(Main.keyPresses.poll());
+                })
         );
 
         var moveDownAnimationLoop = new Timeline(
