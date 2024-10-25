@@ -59,22 +59,7 @@ public class Main extends Application {
     }
 
     public void update(GraphicsContext graphicsContext, KeyCode keyPress) {
-        graphicsContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-        graphicsContext.setFill(Color.PAPAYAWHIP);
-        graphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-
-        var gameState = Main.game.export();
-
-        for (var rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++ ) {
-            for (var columnIndex = 0; columnIndex < NUM_COLUMNS; columnIndex++) {
-                switch (gameState[rowIndex][columnIndex]) {
-                    case Empty -> { }
-                    case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
-                    case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
-                }
-            }
-        }
-
+        updatePlayerArea(graphicsContext);
         handleKeyPress(keyPress);
     }
 
@@ -119,6 +104,24 @@ public class Main extends Application {
             case KeyCode.UP -> game.rotateCounterclockwise();
             case KeyCode.DOWN -> game.rotateClockwise();
             default -> { }
+        }
+    }
+
+    private void updatePlayerArea(GraphicsContext graphicsContext) {
+        graphicsContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+        graphicsContext.setFill(Color.PAPAYAWHIP);
+        graphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
+        var gameState = Main.game.export();
+
+        for (var rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++ ) {
+            for (var columnIndex = 0; columnIndex < NUM_COLUMNS; columnIndex++) {
+                switch (gameState[rowIndex][columnIndex]) {
+                    case Empty -> { }
+                    case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
+                    case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
+                }
+            }
         }
     }
 }
