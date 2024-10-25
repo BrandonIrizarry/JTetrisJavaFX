@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import xyz.brandonirizarry.game.DownwardCollisionType;
 import xyz.brandonirizarry.game.Game;
 
 import java.util.ArrayDeque;
@@ -53,6 +54,8 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("JTetris");
         primaryStage.show();
+
+        game.start();
     }
 
     public void update(GraphicsContext graphicsContext, KeyCode keyPress) {
@@ -61,11 +64,6 @@ public class Main extends Application {
         graphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
         var gameState = Main.game.export();
-        var lostGame = game.sendNextPieceIfReady();
-
-        if (lostGame) {
-            return;
-        }
 
         for (var rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++ ) {
             for (var columnIndex = 0; columnIndex < NUM_COLUMNS; columnIndex++) {
@@ -105,7 +103,13 @@ public class Main extends Application {
         );
 
         var moveDownAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/3), e -> game.moveDown())
+                new KeyFrame(Duration.millis(1000.0/3), e -> {
+                    var collisionType = game.moveDown();
+
+                    if (collisionType == DownwardCollisionType.GameLost) {
+                        mainAnimationLoop.pause();
+                    }
+                })
         );
 
         mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
