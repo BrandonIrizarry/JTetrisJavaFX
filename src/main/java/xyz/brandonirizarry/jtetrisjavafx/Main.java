@@ -89,7 +89,6 @@ public class Main extends Application {
             case KeyCode.RIGHT -> game.moveRight();
             case KeyCode.UP -> game.rotateCounterclockwise();
             case KeyCode.DOWN -> game.rotateClockwise();
-            case KeyCode.SPACE -> game.hardDrop();
             default -> { }
         }
     }
