@@ -8,7 +8,9 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url=uri("https://jitpack.io")  }
+    maven {
+        url = uri("https://brandonirizarry.xyz/maven/")
+    }
 }
 
 application {
@@ -17,7 +19,7 @@ application {
 }
 
 dependencies {
-    implementation("com.github.BrandonIrizarry:JTetrisBackend:c410120")
+    implementation("xyz.brandonirizarry:jtetris-backend:1.0")
 }
 
 javafx {
