@@ -75,20 +75,7 @@ public class Main extends Application {
             }
         }
 
-        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
-        // to perform the switch expression coming up.
-        if (keyPress == null) {
-            return;
-        }
-
-        // Let's check up on our keypresses.
-        switch (keyPress) {
-            case KeyCode.LEFT -> game.moveLeft();
-            case KeyCode.RIGHT -> game.moveRight();
-            case KeyCode.UP -> game.rotateCounterclockwise();
-            case KeyCode.DOWN -> game.rotateClockwise();
-            default -> { }
-        }
+        handleKeyPress(keyPress);
     }
 
     private void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
@@ -116,5 +103,22 @@ public class Main extends Application {
         moveDownAnimationLoop.setCycleCount(Animation.INDEFINITE);
         mainAnimationLoop.play();
         moveDownAnimationLoop.play();
+    }
+
+    private void handleKeyPress(KeyCode keyPress) {
+        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
+        // to perform the switch expression coming up.
+        if (keyPress == null) {
+            return;
+        }
+
+        // Let's check up on our keypresses.
+        switch (keyPress) {
+            case KeyCode.LEFT -> game.moveLeft();
+            case KeyCode.RIGHT -> game.moveRight();
+            case KeyCode.UP -> game.rotateCounterclockwise();
+            case KeyCode.DOWN -> game.rotateClockwise();
+            default -> { }
+        }
     }
 }
