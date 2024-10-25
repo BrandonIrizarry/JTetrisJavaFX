@@ -19,10 +19,14 @@ application {
 }
 
 dependencies {
-    implementation("xyz.brandonirizarry:jtetris-backend:1.0")
+    implementation("xyz.brandonirizarry:jtetris-backend:1.0-SNAPSHOT")
 }
 
 javafx {
     version = "21"
     modules("javafx.controls", "javafx.fxml", "javafx.media")
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
