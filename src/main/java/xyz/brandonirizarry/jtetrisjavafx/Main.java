@@ -84,7 +84,7 @@ public class Main extends Application {
     private static class DownwardVelocity {
         final Timeline animationLoop;
         final double defaultRate = 1.0;
-        final double fastRate = 10.0;
+        final double fastRate = 20.0;
         double currentRate = defaultRate;
 
         DownwardVelocity(Timeline mainAnimationLoop) {
