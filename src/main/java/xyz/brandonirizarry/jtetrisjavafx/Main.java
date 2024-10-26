@@ -94,6 +94,8 @@ public class Main extends Application {
 
                         if (collisionType == DownwardCollisionType.GameLost) {
                             mainAnimationLoop.pause();
+                        } else if (collisionType != DownwardCollisionType.FreeFall) {
+                            this.decelerate();
                         }
                     })
             );
