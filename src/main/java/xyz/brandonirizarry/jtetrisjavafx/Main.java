@@ -71,6 +71,8 @@ public class Main extends Application {
 
         var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop);
 
+        // This needs to be separate from the mainAnimationLoop timeline, to avoid a
+        // circular dependency.
         var keyPressAnimationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(Main.keyPresses.poll(), moveDownAnimationLoop))
         );
