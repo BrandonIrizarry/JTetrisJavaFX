@@ -69,7 +69,7 @@ public class Main extends Application {
                 new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(graphicsContext))
         );
 
-        var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop);
+        var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop, game);
 
         // This needs to be separate from the mainAnimationLoop timeline, to avoid a
         // circular dependency.
@@ -81,48 +81,6 @@ public class Main extends Application {
         keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
         mainAnimationLoop.play();
         keyPressAnimationLoop.play();
-    }
-
-    private static class DownwardVelocity {
-        final Timeline animationLoop;
-        final double defaultRate = 1.0;
-        final double fastRate = 20.0;
-        double currentRate = defaultRate;
-
-        DownwardVelocity(Timeline mainAnimationLoop) {
-            this.animationLoop = new Timeline(
-                    new KeyFrame(Duration.millis(1000.0), e -> {
-                        var collisionType = game.moveDown();
-
-                        if (collisionType == DownwardCollisionType.GameLost) {
-                            mainAnimationLoop.pause();
-                        } else if (collisionType != DownwardCollisionType.FreeFall) {
-                            this.decelerate();
-                        }
-                    })
-            );
-
-            this.animationLoop.setCycleCount(Animation.INDEFINITE);
-            this.animationLoop.play();
-        }
-
-        private void accelerate() {
-            this.animationLoop.setRate(this.fastRate);
-            this.currentRate = this.fastRate;
-        }
-
-        private void decelerate() {
-            this.animationLoop.setRate(this.defaultRate);
-            this.currentRate = this.defaultRate;
-        }
-
-        void toggleAcceleration() {
-            if (this.currentRate == this.fastRate) {
-                this.decelerate();
-            } else if (this.currentRate == this.defaultRate) {
-                this.accelerate();
-            }
-        }
     }
 
     private void handleKeyPress(KeyCode keyPress, DownwardVelocity moveDownAnimationLoop) {
@@ -158,6 +116,48 @@ public class Main extends Application {
                     case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
                 }
             }
+        }
+    }
+}
+
+class DownwardVelocity {
+    final Timeline animationLoop;
+    final double defaultRate = 1.0;
+    final double fastRate = 20.0;
+    double currentRate = defaultRate;
+
+    DownwardVelocity(Timeline mainAnimationLoop, Game game) {
+        this.animationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0), e -> {
+                    var collisionType = game.moveDown();
+
+                    if (collisionType == DownwardCollisionType.GameLost) {
+                        mainAnimationLoop.pause();
+                    } else if (collisionType != DownwardCollisionType.FreeFall) {
+                        this.decelerate();
+                    }
+                })
+        );
+
+        this.animationLoop.setCycleCount(Animation.INDEFINITE);
+        this.animationLoop.play();
+    }
+
+    private void accelerate() {
+        this.animationLoop.setRate(this.fastRate);
+        this.currentRate = this.fastRate;
+    }
+
+    private void decelerate() {
+        this.animationLoop.setRate(this.defaultRate);
+        this.currentRate = this.defaultRate;
+    }
+
+    void toggleAcceleration() {
+        if (this.currentRate == this.fastRate) {
+            this.decelerate();
+        } else if (this.currentRate == this.defaultRate) {
+            this.accelerate();
         }
     }
 }
