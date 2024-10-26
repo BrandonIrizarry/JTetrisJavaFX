@@ -104,12 +104,12 @@ public class Main extends Application {
             this.animationLoop.play();
         }
 
-        void accelerate() {
+        private void accelerate() {
             this.animationLoop.setRate(this.fastRate);
             this.currentRate = this.fastRate;
         }
 
-        void decelerate() {
+        private void decelerate() {
             this.animationLoop.setRate(this.defaultRate);
             this.currentRate = this.defaultRate;
         }
