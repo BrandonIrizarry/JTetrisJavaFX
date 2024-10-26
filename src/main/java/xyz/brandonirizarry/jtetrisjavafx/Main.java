@@ -106,10 +106,20 @@ public class Main extends Application {
 
         void accelerate() {
             this.animationLoop.setRate(this.fastRate);
+            this.currentRate = this.fastRate;
         }
 
         void decelerate() {
             this.animationLoop.setRate(this.defaultRate);
+            this.currentRate = this.defaultRate;
+        }
+
+        void toggleAcceleration() {
+            if (this.currentRate == this.fastRate) {
+                this.decelerate();
+            } else if (this.currentRate == this.defaultRate) {
+                this.accelerate();
+            }
         }
     }
 
@@ -126,7 +136,7 @@ public class Main extends Application {
             case KeyCode.RIGHT -> game.moveRight();
             case KeyCode.UP -> game.rotateCounterclockwise();
             case KeyCode.DOWN -> game.rotateClockwise();
-            case KeyCode.SPACE -> moveDownAnimationLoop.accelerate();
+            case KeyCode.SPACE -> moveDownAnimationLoop.toggleAcceleration();
             default -> { }
         }
     }
