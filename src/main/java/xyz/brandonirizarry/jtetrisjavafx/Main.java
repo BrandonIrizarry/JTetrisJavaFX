@@ -66,29 +66,52 @@ public class Main extends Application {
     private void configureAnimations(GraphicsContext graphicsContext) {
         // This will run the 'update' method 60 times per second
         var mainAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> {
-                    updatePlayerArea(graphicsContext);
-                    handleKeyPress(Main.keyPresses.poll());
-                })
+                new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(graphicsContext))
         );
 
-        var moveDownAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/3), e -> {
-                    var collisionType = game.moveDown();
+        var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop);
 
-                    if (collisionType == DownwardCollisionType.GameLost) {
-                        mainAnimationLoop.pause();
-                    }
-                })
+        var keyPressAnimationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(Main.keyPresses.poll(), moveDownAnimationLoop))
         );
 
         mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        moveDownAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
         mainAnimationLoop.play();
-        moveDownAnimationLoop.play();
+        keyPressAnimationLoop.play();
     }
 
-    private void handleKeyPress(KeyCode keyPress) {
+    private static class DownwardVelocity {
+        final Timeline animationLoop;
+        final double defaultRate = 1.0;
+        final double fastRate = 10.0;
+        double currentRate = defaultRate;
+
+        DownwardVelocity(Timeline mainAnimationLoop) {
+            this.animationLoop = new Timeline(
+                    new KeyFrame(Duration.millis(1000.0), e -> {
+                        var collisionType = game.moveDown();
+
+                        if (collisionType == DownwardCollisionType.GameLost) {
+                            mainAnimationLoop.pause();
+                        }
+                    })
+            );
+
+            this.animationLoop.setCycleCount(Animation.INDEFINITE);
+            this.animationLoop.play();
+        }
+
+        void accelerate() {
+            this.animationLoop.setRate(this.fastRate);
+        }
+
+        void decelerate() {
+            this.animationLoop.setRate(this.defaultRate);
+        }
+    }
+
+    private void handleKeyPress(KeyCode keyPress, DownwardVelocity moveDownAnimationLoop) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
         if (keyPress == null) {
@@ -101,6 +124,7 @@ public class Main extends Application {
             case KeyCode.RIGHT -> game.moveRight();
             case KeyCode.UP -> game.rotateCounterclockwise();
             case KeyCode.DOWN -> game.rotateClockwise();
+            case KeyCode.SPACE -> moveDownAnimationLoop.accelerate();
             default -> { }
         }
     }
