@@ -128,6 +128,8 @@ public class Main extends Application {
         double currentRate = defaultRate;
 
         DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
+            this.updateSidebar(sideGraphicsContext, DownwardCollisionType.FreeFall);
+
             this.animationLoop = new Timeline(
                     new KeyFrame(Duration.millis(1000.0), e -> {
                         var collisionType = game.moveDown();
