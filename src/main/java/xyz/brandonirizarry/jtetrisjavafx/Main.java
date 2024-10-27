@@ -170,13 +170,16 @@ public class Main extends Application {
 
             var score = game.getScore();
             var level = game.getLevel();
+            var numLinesCleared = game.getNumLinesCleared();
 
             var scoreText = "Score: %d".formatted(score);
             var levelText = "Level: %d".formatted(level);
+            var numLinesClearedText = "Lines cleared: %d".formatted(numLinesCleared);
 
             sideGraphicsContext.setFill(Color.BLACK);
             sideGraphicsContext.fillText(scoreText, 0, 10);
             sideGraphicsContext.fillText(levelText, 0, 30);
+            sideGraphicsContext.fillText(numLinesClearedText, 0, 50);
         }
 
     }
