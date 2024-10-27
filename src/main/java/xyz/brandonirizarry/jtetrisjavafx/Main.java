@@ -169,9 +169,14 @@ public class Main extends Application {
             sideGraphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
             var score = game.getScore();
+            var level = game.getLevel();
+
+            var scoreText = "Score: %d".formatted(score);
+            var levelText = "Level: %d".formatted(level);
 
             sideGraphicsContext.setFill(Color.BLACK);
-            sideGraphicsContext.fillText(Integer.toString(score), 10, 10);
+            sideGraphicsContext.fillText(scoreText, 0, 10);
+            sideGraphicsContext.fillText(levelText, 0, 30);
         }
 
     }
