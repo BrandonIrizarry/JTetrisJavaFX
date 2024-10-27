@@ -128,12 +128,12 @@ public class Main extends Application {
         double currentRate = defaultRate;
 
         DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
-            this.updateSidebar(sideGraphicsContext, DownwardCollisionType.FreeFall);
+            this.updateSidebar(sideGraphicsContext);
 
             this.animationLoop = new Timeline(
                     new KeyFrame(Duration.millis(1000.0), e -> {
                         var collisionType = game.moveDown();
-                        this.updateSidebar(sideGraphicsContext, collisionType);
+                        this.updateSidebar(sideGraphicsContext);
 
                         if (collisionType == DownwardCollisionType.GameLost) {
                             mainAnimationLoop.pause();
@@ -165,7 +165,7 @@ public class Main extends Application {
             }
         }
 
-        void updateSidebar(GraphicsContext sideGraphicsContext, DownwardCollisionType collisionType) {
+        void updateSidebar(GraphicsContext sideGraphicsContext) {
             sideGraphicsContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
             sideGraphicsContext.setFill(Color.PAPAYAWHIP);
             sideGraphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
