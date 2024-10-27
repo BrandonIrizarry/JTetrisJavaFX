@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import xyz.brandonirizarry.game.DownwardCollisionType;
 import xyz.brandonirizarry.game.Game;
 
 import java.util.ArrayDeque;
@@ -39,10 +40,12 @@ public class Main extends Application {
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> Main.keyPresses.add(e.getCode()));
         var gameGraphicsContext = gameCanvas.getGraphicsContext2D();
-        configureAnimations(gameGraphicsContext);
 
         var sideCanvas = new Canvas(SIDE_WIDTH, BOARD_HEIGHT);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
+
+        configureAnimations(gameGraphicsContext, sideGraphicsContext);
+
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),
@@ -62,13 +65,13 @@ public class Main extends Application {
         graphicsContext.fillRect(columnIndex *  SQUARE_UNIT, rowIndex * SQUARE_UNIT, SQUARE_UNIT, SQUARE_UNIT);
     }
 
-    private void configureAnimations(GraphicsContext graphicsContext) {
+    private void configureAnimations(GraphicsContext graphicsContext, GraphicsContext sideGraphicsContext) {
         // This will run the 'update' method 60 times per second
         var mainAnimationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(graphicsContext))
         );
 
-        var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop, game);
+        var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop, sideGraphicsContext);
 
         // This needs to be separate from the mainAnimationLoop timeline, to avoid a
         // circular dependency.
@@ -116,5 +119,60 @@ public class Main extends Application {
                 }
             }
         }
+    }
+
+    private static class DownwardVelocity {
+        final Timeline animationLoop;
+        final double defaultRate = 1.0;
+        final double fastRate = 20.0;
+        double currentRate = defaultRate;
+
+        DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
+            this.animationLoop = new Timeline(
+                    new KeyFrame(Duration.millis(1000.0), e -> {
+                        var collisionType = game.moveDown();
+                        this.updateSidebar(sideGraphicsContext, collisionType);
+
+                        if (collisionType == DownwardCollisionType.GameLost) {
+                            mainAnimationLoop.pause();
+                        } else if (collisionType != DownwardCollisionType.FreeFall) {
+                            this.decelerate();
+                        }
+                    })
+            );
+
+            this.animationLoop.setCycleCount(Animation.INDEFINITE);
+            this.animationLoop.play();
+        }
+
+        private void accelerate() {
+            this.animationLoop.setRate(this.fastRate);
+            this.currentRate = this.fastRate;
+        }
+
+        private void decelerate() {
+            this.animationLoop.setRate(this.defaultRate);
+            this.currentRate = this.defaultRate;
+        }
+
+        void toggleAcceleration() {
+            if (this.currentRate == this.fastRate) {
+                this.decelerate();
+            } else if (this.currentRate == this.defaultRate) {
+                this.accelerate();
+            }
+        }
+
+        void updateSidebar(GraphicsContext sideGraphicsContext, DownwardCollisionType collisionType) {
+            sideGraphicsContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+            sideGraphicsContext.setFill(Color.PAPAYAWHIP);
+            sideGraphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
+            var score = game.getScore();
+
+            sideGraphicsContext.setFill(Color.BLACK);
+            sideGraphicsContext.fillText(Integer.toString(score), 10, 10);
+        }
+
     }
 }
