@@ -144,6 +144,7 @@ public class Main extends Application {
             );
 
             this.animationLoop.setCycleCount(Animation.INDEFINITE);
+            this.animationLoop.setRate(this.defaultRate);
             this.animationLoop.play();
         }
 
