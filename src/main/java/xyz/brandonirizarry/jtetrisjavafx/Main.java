@@ -98,7 +98,7 @@ public class Main extends Application {
             case KeyCode.RIGHT -> game.moveRight();
             case KeyCode.UP -> game.rotateCounterclockwise();
             case KeyCode.DOWN -> game.rotateClockwise();
-            case KeyCode.SPACE -> moveDownAnimationLoop.toggleAcceleration();
+            case KeyCode.SPACE -> moveDownAnimationLoop.toggleBoost();
             default -> { }
         }
     }
@@ -138,7 +138,7 @@ public class Main extends Application {
                         if (collisionType == DownwardCollisionType.GameLost) {
                             mainAnimationLoop.pause();
                         } else if (collisionType != DownwardCollisionType.FreeFall) {
-                            this.decelerate();
+                            this.turnOffBoost();
                         }
                     })
             );
@@ -147,21 +147,21 @@ public class Main extends Application {
             this.animationLoop.play();
         }
 
-        private void accelerate() {
+        private void turnOnBoost() {
             this.animationLoop.setRate(this.fastRate);
             this.currentRate = this.fastRate;
         }
 
-        private void decelerate() {
+        private void turnOffBoost() {
             this.animationLoop.setRate(this.defaultRate);
             this.currentRate = this.defaultRate;
         }
 
-        void toggleAcceleration() {
+        void toggleBoost() {
             if (this.currentRate == this.fastRate) {
-                this.decelerate();
+                this.turnOffBoost();
             } else if (this.currentRate == this.defaultRate) {
-                this.accelerate();
+                this.turnOnBoost();
             }
         }
 
