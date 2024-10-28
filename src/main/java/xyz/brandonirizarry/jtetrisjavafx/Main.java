@@ -121,6 +121,14 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * A class for managing state related to downward movement (for
+     * example, what happens when a piece lands.)<br><br>
+     *
+     * This class is also responsible for updating the side-panel
+     * display, since all game statistics displayed there are updated
+     * only whenever a piece lands.
+     */
     private static class DownwardVelocity {
         final Timeline animationLoop;
         final double initialRate = 1.0;
