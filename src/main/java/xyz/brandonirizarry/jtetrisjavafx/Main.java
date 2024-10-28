@@ -123,9 +123,10 @@ public class Main extends Application {
 
     private static class DownwardVelocity {
         final Timeline animationLoop;
-        final double defaultRate = 1.0;
-        final double fastRate = 20.0;
-        double currentRate = defaultRate;
+        final double initialRate = 1.0;
+        final double boostedRate = 20.0;
+        double currentRate = initialRate;
+        boolean boostOn = false;
 
         DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
             this.updateSidebar(sideGraphicsContext);
@@ -140,28 +141,30 @@ public class Main extends Application {
                         } else if (collisionType != DownwardCollisionType.FreeFall) {
                             this.turnOffBoost();
                         }
+
+                        this.currentRate = game.getLevel() + 1;
                     })
             );
 
             this.animationLoop.setCycleCount(Animation.INDEFINITE);
-            this.animationLoop.setRate(this.defaultRate);
+            this.animationLoop.setRate(this.currentRate);
             this.animationLoop.play();
         }
 
         private void turnOnBoost() {
-            this.animationLoop.setRate(this.fastRate);
-            this.currentRate = this.fastRate;
+            this.animationLoop.setRate(this.boostedRate);
+            boostOn = true;
         }
 
         private void turnOffBoost() {
-            this.animationLoop.setRate(this.defaultRate);
-            this.currentRate = this.defaultRate;
+            this.animationLoop.setRate(this.currentRate);
+            boostOn = false;
         }
 
         void toggleBoost() {
-            if (this.currentRate == this.fastRate) {
+            if (boostOn) {
                 this.turnOffBoost();
-            } else if (this.currentRate == this.defaultRate) {
+            } else {
                 this.turnOnBoost();
             }
         }
