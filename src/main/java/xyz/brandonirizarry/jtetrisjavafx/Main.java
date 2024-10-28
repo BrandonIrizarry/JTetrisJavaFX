@@ -142,7 +142,7 @@ public class Main extends Application {
                             this.turnOffBoost();
                         }
 
-                        this.currentRate = game.getLevel() + 1;
+                        this.currentRate = game.getLevel() + 0.5;
                     })
             );
 
