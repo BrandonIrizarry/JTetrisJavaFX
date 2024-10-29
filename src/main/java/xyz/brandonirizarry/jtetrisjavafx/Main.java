@@ -32,8 +32,18 @@ public class Main extends Application {
         var sideCanvas = new Canvas(sideWidth, boardHeight);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
 
-        configureAnimations(gameGraphicsContext, sideGraphicsContext);
+        // This will run the 'update' method 60 times per second
+        var mainAnimationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(gameGraphicsContext))
+        );
 
+        mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        mainAnimationLoop.play();
+
+        // This sets up the falling motion as a separate animation loop, and
+        // configures one for keypresses as well, since many of these affect the
+        // downward motion.
+        new DownwardVelocity(mainAnimationLoop, sideGraphicsContext);
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),
@@ -51,21 +61,6 @@ public class Main extends Application {
     private void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
         graphicsContext.setFill(color);
         graphicsContext.fillRect(columnIndex *  squareUnit, rowIndex * squareUnit, squareUnit, squareUnit);
-    }
-
-    private void configureAnimations(GraphicsContext graphicsContext, GraphicsContext sideGraphicsContext) {
-        // This will run the 'update' method 60 times per second
-        var mainAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(graphicsContext))
-        );
-
-        // This sets up the falling motion as a separate animation loop, and
-        // configures one for keypresses as well, since many of these affect the
-        // downward motion.
-        new DownwardVelocity(mainAnimationLoop, sideGraphicsContext);
-
-        mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        mainAnimationLoop.play();
     }
 
     private void updatePlayerArea(GraphicsContext graphicsContext) {
