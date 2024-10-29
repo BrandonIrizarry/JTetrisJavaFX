@@ -13,8 +13,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import xyz.brandonirizarry.game.DownwardCollisionType;
-import xyz.brandonirizarry.game.Game;
+import xyz.brandonirizarry.jtetris.game.DownwardCollisionType;
+import xyz.brandonirizarry.jtetris.game.Game;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
