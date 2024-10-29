@@ -14,34 +14,22 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import xyz.brandonirizarry.jtetris.game.DownwardCollisionType;
-import xyz.brandonirizarry.jtetris.game.Game;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
 public class Main extends Application {
-    private static final int NUM_ROWS = 20;
-    private static final int NUM_COLUMNS = 10;
-    private static final double SQUARE_UNIT = 25.0;
-    private static final double BOARD_HEIGHT = NUM_ROWS * SQUARE_UNIT;
-    private static final double BOARD_WIDTH = NUM_COLUMNS * SQUARE_UNIT;
-    private static final double SIDE_WIDTH = BOARD_WIDTH * 0.66;
-
-    private static final Game game = new Game(NUM_ROWS, NUM_COLUMNS);
-    private static final Queue<KeyCode> keyPresses = new ArrayDeque<>();
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        var gameCanvas = new Canvas(BOARD_WIDTH, BOARD_HEIGHT);
+        var gameCanvas = new Canvas(boardWidth, boardHeight);
         gameCanvas.setFocusTraversable(true);
-        gameCanvas.setOnKeyPressed(e -> Main.keyPresses.add(e.getCode()));
+        gameCanvas.setOnKeyPressed(e -> keyPresses.add(e.getCode()));
         var gameGraphicsContext = gameCanvas.getGraphicsContext2D();
 
-        var sideCanvas = new Canvas(SIDE_WIDTH, BOARD_HEIGHT);
+        var sideCanvas = new Canvas(sideWidth, boardHeight);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
 
         configureAnimations(gameGraphicsContext, sideGraphicsContext);
@@ -52,7 +40,7 @@ public class Main extends Application {
                 new StackPane(sideCanvas)
         );
 
-        var scene = new Scene(splitPane, BOARD_WIDTH + SIDE_WIDTH, BOARD_HEIGHT);
+        var scene = new Scene(splitPane, boardWidth + sideWidth, boardHeight);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JTetris");
         primaryStage.show();
@@ -62,7 +50,7 @@ public class Main extends Application {
 
     private void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
         graphicsContext.setFill(color);
-        graphicsContext.fillRect(columnIndex *  SQUARE_UNIT, rowIndex * SQUARE_UNIT, SQUARE_UNIT, SQUARE_UNIT);
+        graphicsContext.fillRect(columnIndex *  squareUnit, rowIndex * squareUnit, squareUnit, squareUnit);
     }
 
     private void configureAnimations(GraphicsContext graphicsContext, GraphicsContext sideGraphicsContext) {
@@ -81,14 +69,14 @@ public class Main extends Application {
     }
 
     private void updatePlayerArea(GraphicsContext graphicsContext) {
-        graphicsContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+        graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
         graphicsContext.setFill(Color.PAPAYAWHIP);
-        graphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+        graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
 
-        var gameState = Main.game.export();
+        var gameState = game.export();
 
-        for (var rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++ ) {
-            for (var columnIndex = 0; columnIndex < NUM_COLUMNS; columnIndex++) {
+        for (var rowIndex = 0; rowIndex < numRows; rowIndex++ ) {
+            for (var columnIndex = 0; columnIndex < numColumns; columnIndex++) {
                 switch (gameState[rowIndex][columnIndex]) {
                     case Empty -> { }
                     case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
@@ -132,7 +120,7 @@ public class Main extends Application {
             );
 
             var keyPressAnimationLoop = new Timeline(
-                    new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(Main.keyPresses.poll()))
+                    new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(keyPresses.poll()))
             );
 
             keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
@@ -162,9 +150,9 @@ public class Main extends Application {
         }
 
         void updateSidebar(GraphicsContext sideGraphicsContext) {
-            sideGraphicsContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+            sideGraphicsContext.clearRect(0, 0, boardWidth, boardHeight);
             sideGraphicsContext.setFill(Color.PAPAYAWHIP);
-            sideGraphicsContext.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+            sideGraphicsContext.fillRect(0, 0, boardWidth, boardHeight);
 
             var score = game.getScore();
             var level = game.getLevel();
