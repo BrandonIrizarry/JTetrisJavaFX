@@ -71,36 +71,13 @@ public class Main extends Application {
                 new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(graphicsContext))
         );
 
-        var moveDownAnimationLoop = new DownwardVelocity(mainAnimationLoop, sideGraphicsContext);
-
-        // This needs to be separate from the mainAnimationLoop timeline, to avoid a
-        // circular dependency.
-        var keyPressAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(Main.keyPresses.poll(), moveDownAnimationLoop))
-        );
+        // This sets up the falling motion as a separate animation loop, and
+        // configures one for keypresses as well, since many of these affect the
+        // downward motion.
+        new DownwardVelocity(mainAnimationLoop, sideGraphicsContext);
 
         mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
         mainAnimationLoop.play();
-        keyPressAnimationLoop.play();
-    }
-
-    private void handleKeyPress(KeyCode keyPress, DownwardVelocity moveDownAnimationLoop) {
-        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
-        // to perform the switch expression coming up.
-        if (keyPress == null) {
-            return;
-        }
-
-        // Let's check up on our keypresses.
-        switch (keyPress) {
-            case KeyCode.LEFT -> game.moveLeft();
-            case KeyCode.RIGHT -> game.moveRight();
-            case KeyCode.UP -> game.rotateCounterclockwise();
-            case KeyCode.DOWN -> game.rotateClockwise();
-            case KeyCode.SPACE -> moveDownAnimationLoop.toggleBoost();
-            default -> { }
-        }
     }
 
     private void updatePlayerArea(GraphicsContext graphicsContext) {
@@ -154,6 +131,13 @@ public class Main extends Application {
                     })
             );
 
+            var keyPressAnimationLoop = new Timeline(
+                    new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(Main.keyPresses.poll()))
+            );
+
+            keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
+            keyPressAnimationLoop.play();
+
             this.animationLoop.setCycleCount(Animation.INDEFINITE);
             this.animationLoop.setRate(this.currentRate);
             this.animationLoop.play();
@@ -196,5 +180,22 @@ public class Main extends Application {
             sideGraphicsContext.fillText(numLinesClearedText, 0, 50);
         }
 
+        void handleKeyPress(KeyCode keyPress) {
+            // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
+            // to perform the switch expression coming up.
+            if (keyPress == null) {
+                return;
+            }
+
+            // Let's check up on our keypresses.
+            switch (keyPress) {
+                case KeyCode.LEFT -> game.moveLeft();
+                case KeyCode.RIGHT -> game.moveRight();
+                case KeyCode.UP -> game.rotateCounterclockwise();
+                case KeyCode.DOWN -> game.rotateClockwise();
+                case KeyCode.SPACE -> this.toggleBoost();
+                default -> { }
+            }
+        }
     }
 }
