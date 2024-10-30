@@ -6,11 +6,9 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -72,124 +70,6 @@ public class Main extends Application {
             case KeyCode.DOWN -> game.rotateClockwise();
             case KeyCode.SPACE -> downwardVelocity.toggleBoost();
             default -> { }
-        }
-    }
-}
-
-/**
- * A class for managing state related to downward movement (for
- * example, what happens when a piece lands.)<br><br>
- *
- * This class is also responsible for updating the side-panel
- * display, since all game statistics displayed there are updated
- * only whenever a piece lands.
- */
-class DownwardVelocity {
-    Timeline animationLoop;
-    final double initialRate = 1.0/frameRate;
-    final double boostedRate = this.initialRate * 20.0;
-    double currentRate = initialRate;
-    boolean boostOn = false;
-    GraphicsContext graphicsContext;
-
-    DownwardVelocity(GraphicsContext sideGraphicsContext) {
-        this.graphicsContext = sideGraphicsContext;
-        this.updateSidebar();
-
-        this.animationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
-                    var freeFallInProgress = game.moveDown();
-
-                    if (!freeFallInProgress) {
-                        this.turnOffBoost();
-                        this.animationLoop.setRate(this.currentRate);
-                    }
-
-                    this.updateSidebar();
-                    this.currentRate = (game.getLevel() + 1.0)/frameRate;
-                })
-        );
-
-        this.animationLoop.setCycleCount(Animation.INDEFINITE);
-        this.animationLoop.setRate(this.currentRate);
-        this.animationLoop.play();
-    }
-
-    private void turnOnBoost() {
-        this.animationLoop.setRate(this.boostedRate);
-        boostOn = true;
-    }
-
-    private void turnOffBoost() {
-        this.animationLoop.setRate(this.currentRate);
-        boostOn = false;
-    }
-
-    void toggleBoost() {
-        if (boostOn) {
-            this.turnOffBoost();
-        } else {
-            this.turnOnBoost();
-        }
-    }
-
-    void updateSidebar() {
-        this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-        this.graphicsContext.setFill(Color.PAPAYAWHIP);
-        this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
-
-        var score = game.getScore();
-        var level = game.getLevel();
-        var numLinesCleared = game.getNumLinesCleared();
-
-        var scoreText = "Score: %d".formatted(score);
-        var levelText = "Level: %d".formatted(level);
-        var numLinesClearedText = "Lines cleared: %d".formatted(numLinesCleared);
-
-        this.graphicsContext.setFill(Color.BLACK);
-        this.graphicsContext.fillText(scoreText, 0, 10);
-        this.graphicsContext.fillText(levelText, 0, 30);
-        this.graphicsContext.fillText(numLinesClearedText, 0, 50);
-        this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), 0, 70); // debug
-    }
-}
-
-class MainRenderer {
-    GraphicsContext graphicsContext;
-    Timeline animationLoop;
-
-    MainRenderer(GraphicsContext graphicsContext) {
-        this.graphicsContext = graphicsContext;
-
-        this.animationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
-                    updatePlayerArea(graphicsContext);
-
-                    if (game.isGameLost()) {
-                        this.animationLoop.pause();
-                    }
-                })
-        );
-
-        this.animationLoop.setCycleCount(Animation.INDEFINITE);
-        this.animationLoop.play();
-    }
-
-    void updatePlayerArea(GraphicsContext graphicsContext) {
-        graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-        graphicsContext.setFill(Color.PAPAYAWHIP);
-        graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
-
-        var gameState = game.export();
-
-        for (var rowIndex = 0; rowIndex < numRows; rowIndex++ ) {
-            for (var columnIndex = 0; columnIndex < numColumns; columnIndex++) {
-                switch (gameState[rowIndex][columnIndex]) {
-                    case Empty -> { }
-                    case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
-                    case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
-                }
-            }
         }
     }
 }
