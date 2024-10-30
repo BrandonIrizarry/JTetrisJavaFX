@@ -126,9 +126,11 @@ class DownwardVelocity {
     final double boostedRate = 20.0;
     double currentRate = initialRate;
     boolean boostOn = false;
+    GraphicsContext graphicsContext;
 
     DownwardVelocity(GraphicsContext sideGraphicsContext) {
-        this.updateSidebar(sideGraphicsContext);
+        this.graphicsContext = sideGraphicsContext;
+        this.updateSidebar();
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0), e -> {
@@ -138,7 +140,7 @@ class DownwardVelocity {
                         this.turnOffBoost();
                     }
 
-                    this.updateSidebar(sideGraphicsContext);
+                    this.updateSidebar();
                     this.currentRate = game.getLevel() + 0.5;
                 })
         );
@@ -166,10 +168,10 @@ class DownwardVelocity {
         }
     }
 
-    void updateSidebar(GraphicsContext sideGraphicsContext) {
-        sideGraphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-        sideGraphicsContext.setFill(Color.PAPAYAWHIP);
-        sideGraphicsContext.fillRect(0, 0, boardWidth, boardHeight);
+    void updateSidebar() {
+        this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
+        this.graphicsContext.setFill(Color.PAPAYAWHIP);
+        this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
 
         var score = game.getScore();
         var level = game.getLevel();
@@ -179,9 +181,9 @@ class DownwardVelocity {
         var levelText = "Level: %d".formatted(level);
         var numLinesClearedText = "Lines cleared: %d".formatted(numLinesCleared);
 
-        sideGraphicsContext.setFill(Color.BLACK);
-        sideGraphicsContext.fillText(scoreText, 0, 10);
-        sideGraphicsContext.fillText(levelText, 0, 30);
-        sideGraphicsContext.fillText(numLinesClearedText, 0, 50);
+        this.graphicsContext.setFill(Color.BLACK);
+        this.graphicsContext.fillText(scoreText, 0, 10);
+        this.graphicsContext.fillText(levelText, 0, 30);
+        this.graphicsContext.fillText(numLinesClearedText, 0, 50);
     }
 }
