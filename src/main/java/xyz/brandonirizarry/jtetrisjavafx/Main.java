@@ -38,7 +38,7 @@ public class Main extends Application {
         var downwardVelocity = new DownwardVelocity(sideGraphicsContext);
 
         var keyPressAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(keyPresses.poll(), downwardVelocity))
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleKeyPress(keyPresses.poll(), downwardVelocity))
         );
 
         keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
@@ -162,7 +162,7 @@ class MainRenderer {
         Timeline[] mainAnimationLoop = new Timeline[1];
 
         mainAnimationLoop[0] = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> {
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                     updatePlayerArea(graphicsContext);
 
                     if (game.isGameLost()) {
