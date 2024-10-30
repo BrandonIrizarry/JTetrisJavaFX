@@ -161,7 +161,6 @@ class MainRenderer {
     MainRenderer(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
 
-        // This will run the 'update' method 30 times per second
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                     updatePlayerArea(graphicsContext);
