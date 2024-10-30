@@ -45,7 +45,7 @@ public class DownwardVelocity {
         );
 
         var keyPressLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleKeyPress())
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleKeyPress(keyPresses.poll()))
         );
 
         keyPressLoop.setCycleCount(Animation.INDEFINITE);
@@ -94,9 +94,7 @@ public class DownwardVelocity {
         this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), 0, 70); // debug
     }
 
-    void handleKeyPress() {
-        var keyPress = keyPresses.poll();
-
+    void handleKeyPress(KeyCode keyPress) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
         if (keyPress == null) {

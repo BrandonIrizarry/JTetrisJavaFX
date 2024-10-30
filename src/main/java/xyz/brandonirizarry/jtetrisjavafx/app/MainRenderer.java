@@ -19,7 +19,7 @@ public class MainRenderer {
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
-                    this.handleKeyPress();
+                    this.handleKeyPress(keyPresses.poll());
                     this.updatePlayerArea(graphicsContext);
 
                     if (game.isGameLost()) {
@@ -50,9 +50,7 @@ public class MainRenderer {
         }
     }
 
-    void handleKeyPress() {
-        var keyPress = keyPresses.poll();
-
+    void handleKeyPress(KeyCode keyPress) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
         if (keyPress == null) {
