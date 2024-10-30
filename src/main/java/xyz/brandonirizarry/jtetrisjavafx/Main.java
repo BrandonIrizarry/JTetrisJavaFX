@@ -158,7 +158,7 @@ class MainRenderer {
     MainRenderer(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
 
-        // This will run the 'update' method 60 times per second
+        // This will run the 'update' method 30 times per second
         Timeline[] mainAnimationLoop = new Timeline[1];
 
         mainAnimationLoop[0] = new Timeline(
