@@ -81,104 +81,105 @@ public class Main extends Application {
         }
     }
 
-    /**
-     * A class for managing state related to downward movement (for
-     * example, what happens when a piece lands.)<br><br>
-     *
-     * This class is also responsible for updating the side-panel
-     * display, since all game statistics displayed there are updated
-     * only whenever a piece lands.
-     */
-    private static class DownwardVelocity {
-        final Timeline animationLoop;
-        final double initialRate = 1.0;
-        final double boostedRate = 20.0;
-        double currentRate = initialRate;
-        boolean boostOn = false;
+}
 
-        DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
-            this.updateSidebar(sideGraphicsContext);
+/**
+ * A class for managing state related to downward movement (for
+ * example, what happens when a piece lands.)<br><br>
+ *
+ * This class is also responsible for updating the side-panel
+ * display, since all game statistics displayed there are updated
+ * only whenever a piece lands.
+ */
+class DownwardVelocity {
+    final Timeline animationLoop;
+    final double initialRate = 1.0;
+    final double boostedRate = 20.0;
+    double currentRate = initialRate;
+    boolean boostOn = false;
 
-            this.animationLoop = new Timeline(
-                    new KeyFrame(Duration.millis(1000.0), e -> {
-                        var collisionType = game.moveDown();
-                        this.updateSidebar(sideGraphicsContext);
+    DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
+        this.updateSidebar(sideGraphicsContext);
 
-                        if (collisionType == DownwardCollisionType.GameLost) {
-                            mainAnimationLoop.pause();
-                        } else if (collisionType != DownwardCollisionType.FreeFall) {
-                            this.turnOffBoost();
-                        }
+        this.animationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0), e -> {
+                    var collisionType = game.moveDown();
+                    this.updateSidebar(sideGraphicsContext);
 
-                        this.currentRate = game.getLevel() + 0.5;
-                    })
-            );
+                    if (collisionType == DownwardCollisionType.GameLost) {
+                        mainAnimationLoop.pause();
+                    } else if (collisionType != DownwardCollisionType.FreeFall) {
+                        this.turnOffBoost();
+                    }
 
-            var keyPressAnimationLoop = new Timeline(
-                    new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(keyPresses.poll()))
-            );
+                    this.currentRate = game.getLevel() + 0.5;
+                })
+        );
 
-            keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
-            keyPressAnimationLoop.play();
+        var keyPressAnimationLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/30), e -> handleKeyPress(keyPresses.poll()))
+        );
 
-            this.animationLoop.setCycleCount(Animation.INDEFINITE);
-            this.animationLoop.setRate(this.currentRate);
-            this.animationLoop.play();
+        keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
+        keyPressAnimationLoop.play();
+
+        this.animationLoop.setCycleCount(Animation.INDEFINITE);
+        this.animationLoop.setRate(this.currentRate);
+        this.animationLoop.play();
+    }
+
+    private void turnOnBoost() {
+        this.animationLoop.setRate(this.boostedRate);
+        boostOn = true;
+    }
+
+    private void turnOffBoost() {
+        this.animationLoop.setRate(this.currentRate);
+        boostOn = false;
+    }
+
+    void toggleBoost() {
+        if (boostOn) {
+            this.turnOffBoost();
+        } else {
+            this.turnOnBoost();
+        }
+    }
+
+    void updateSidebar(GraphicsContext sideGraphicsContext) {
+        sideGraphicsContext.clearRect(0, 0, boardWidth, boardHeight);
+        sideGraphicsContext.setFill(Color.PAPAYAWHIP);
+        sideGraphicsContext.fillRect(0, 0, boardWidth, boardHeight);
+
+        var score = game.getScore();
+        var level = game.getLevel();
+        var numLinesCleared = game.getNumLinesCleared();
+
+        var scoreText = "Score: %d".formatted(score);
+        var levelText = "Level: %d".formatted(level);
+        var numLinesClearedText = "Lines cleared: %d".formatted(numLinesCleared);
+
+        sideGraphicsContext.setFill(Color.BLACK);
+        sideGraphicsContext.fillText(scoreText, 0, 10);
+        sideGraphicsContext.fillText(levelText, 0, 30);
+        sideGraphicsContext.fillText(numLinesClearedText, 0, 50);
+    }
+
+    void handleKeyPress(KeyCode keyPress) {
+        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
+        // to perform the switch expression coming up.
+        if (keyPress == null) {
+            return;
         }
 
-        private void turnOnBoost() {
-            this.animationLoop.setRate(this.boostedRate);
-            boostOn = true;
-        }
-
-        private void turnOffBoost() {
-            this.animationLoop.setRate(this.currentRate);
-            boostOn = false;
-        }
-
-        void toggleBoost() {
-            if (boostOn) {
-                this.turnOffBoost();
-            } else {
-                this.turnOnBoost();
-            }
-        }
-
-        void updateSidebar(GraphicsContext sideGraphicsContext) {
-            sideGraphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-            sideGraphicsContext.setFill(Color.PAPAYAWHIP);
-            sideGraphicsContext.fillRect(0, 0, boardWidth, boardHeight);
-
-            var score = game.getScore();
-            var level = game.getLevel();
-            var numLinesCleared = game.getNumLinesCleared();
-
-            var scoreText = "Score: %d".formatted(score);
-            var levelText = "Level: %d".formatted(level);
-            var numLinesClearedText = "Lines cleared: %d".formatted(numLinesCleared);
-
-            sideGraphicsContext.setFill(Color.BLACK);
-            sideGraphicsContext.fillText(scoreText, 0, 10);
-            sideGraphicsContext.fillText(levelText, 0, 30);
-            sideGraphicsContext.fillText(numLinesClearedText, 0, 50);
-        }
-
-        void handleKeyPress(KeyCode keyPress) {
-            // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
-            // to perform the switch expression coming up.
-            if (keyPress == null) {
-                return;
-            }
-
-            // Let's check up on our keypresses.
-            switch (keyPress) {
-                case KeyCode.LEFT -> game.moveLeft();
-                case KeyCode.RIGHT -> game.moveRight();
-                case KeyCode.UP -> game.rotateCounterclockwise();
-                case KeyCode.DOWN -> game.rotateClockwise();
-                case KeyCode.SPACE -> this.toggleBoost();
-                default -> { }
-            }
+        // Let's check up on our keypresses.
+        switch (keyPress) {
+            case KeyCode.LEFT -> game.moveLeft();
+            case KeyCode.RIGHT -> game.moveRight();
+            case KeyCode.UP -> game.rotateCounterclockwise();
+            case KeyCode.DOWN -> game.rotateClockwise();
+            case KeyCode.SPACE -> this.toggleBoost();
+            default -> { }
         }
     }
 }
