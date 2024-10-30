@@ -31,7 +31,10 @@ public class Main extends Application {
         var sideCanvas = new Canvas(sideWidth, boardHeight);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
 
-        // This sets up the falling motion as a separate animation loop.
+        // Set up the player-area animation loop and rendering logic.
+        new MainRenderer(gameGraphicsContext);
+
+        // Set up the falling motion as a separate animation loop.
         var downwardVelocity = new DownwardVelocity(sideGraphicsContext);
 
         var keyPressAnimationLoop = new Timeline(
@@ -40,22 +43,6 @@ public class Main extends Application {
 
         keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
         keyPressAnimationLoop.play();
-
-        // This will run the 'update' method 60 times per second
-        Timeline[] mainAnimationLoop = new Timeline[1];
-
-        mainAnimationLoop[0] = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> {
-                    updatePlayerArea(gameGraphicsContext);
-
-                    if (game.isGameLost()) {
-                        mainAnimationLoop[0].pause();
-                    }
-                })
-        );
-
-        mainAnimationLoop[0].setCycleCount(Animation.INDEFINITE);
-        mainAnimationLoop[0].play();
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),
@@ -68,29 +55,6 @@ public class Main extends Application {
         primaryStage.show();
 
         game.start();
-    }
-
-    private void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
-        graphicsContext.setFill(color);
-        graphicsContext.fillRect(columnIndex *  squareUnit, rowIndex * squareUnit, squareUnit, squareUnit);
-    }
-
-    private void updatePlayerArea(GraphicsContext graphicsContext) {
-        graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-        graphicsContext.setFill(Color.PAPAYAWHIP);
-        graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
-
-        var gameState = game.export();
-
-        for (var rowIndex = 0; rowIndex < numRows; rowIndex++ ) {
-            for (var columnIndex = 0; columnIndex < numColumns; columnIndex++) {
-                switch (gameState[rowIndex][columnIndex]) {
-                    case Empty -> { }
-                    case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
-                    case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
-                }
-            }
-        }
     }
 
     void handleKeyPress(KeyCode keyPress, DownwardVelocity downwardVelocity) {
@@ -185,5 +149,47 @@ class DownwardVelocity {
         this.graphicsContext.fillText(scoreText, 0, 10);
         this.graphicsContext.fillText(levelText, 0, 30);
         this.graphicsContext.fillText(numLinesClearedText, 0, 50);
+    }
+}
+
+class MainRenderer {
+    GraphicsContext graphicsContext;
+
+    MainRenderer(GraphicsContext graphicsContext) {
+        this.graphicsContext = graphicsContext;
+
+        // This will run the 'update' method 60 times per second
+        Timeline[] mainAnimationLoop = new Timeline[1];
+
+        mainAnimationLoop[0] = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/30), e -> {
+                    updatePlayerArea(graphicsContext);
+
+                    if (game.isGameLost()) {
+                        mainAnimationLoop[0].pause();
+                    }
+                })
+        );
+
+        mainAnimationLoop[0].setCycleCount(Animation.INDEFINITE);
+        mainAnimationLoop[0].play();
+    }
+
+    void updatePlayerArea(GraphicsContext graphicsContext) {
+        graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
+        graphicsContext.setFill(Color.PAPAYAWHIP);
+        graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
+
+        var gameState = game.export();
+
+        for (var rowIndex = 0; rowIndex < numRows; rowIndex++ ) {
+            for (var columnIndex = 0; columnIndex < numColumns; columnIndex++) {
+                switch (gameState[rowIndex][columnIndex]) {
+                    case Empty -> { }
+                    case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
+                    case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
+                }
+            }
+        }
     }
 }

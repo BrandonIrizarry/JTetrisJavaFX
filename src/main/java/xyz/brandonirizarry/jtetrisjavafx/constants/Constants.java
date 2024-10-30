@@ -1,6 +1,8 @@
 package xyz.brandonirizarry.jtetrisjavafx.constants;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import xyz.brandonirizarry.jtetris.game.Game;
 
 import java.util.ArrayDeque;
@@ -21,5 +23,10 @@ public final class Constants {
         boardHeight = numRows * squareUnit;
         boardWidth = numColumns * squareUnit;
         sideWidth = boardWidth * 0.66;
+    }
+
+    public static void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
+        graphicsContext.setFill(color);
+        graphicsContext.fillRect(columnIndex *  squareUnit, rowIndex * squareUnit, squareUnit, squareUnit);
     }
 }
