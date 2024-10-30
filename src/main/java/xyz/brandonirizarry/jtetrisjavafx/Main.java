@@ -149,6 +149,7 @@ class DownwardVelocity {
         this.graphicsContext.fillText(scoreText, 0, 10);
         this.graphicsContext.fillText(levelText, 0, 30);
         this.graphicsContext.fillText(numLinesClearedText, 0, 50);
+        this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), 0, 70); // debug
     }
 }
 
