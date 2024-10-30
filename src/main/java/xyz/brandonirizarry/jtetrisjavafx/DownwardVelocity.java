@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -38,6 +39,7 @@ public class DownwardVelocity {
                         this.animationLoop.setRate(this.currentRate);
                     }
 
+                    this.handleKeyPress();
                     this.updateSidebar();
                     this.currentRate = (game.getLevel() + 1.0)/frameRate;
                 })
@@ -84,5 +86,24 @@ public class DownwardVelocity {
         this.graphicsContext.fillText(levelText, 0, 30);
         this.graphicsContext.fillText(numLinesClearedText, 0, 50);
         this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), 0, 70); // debug
+    }
+
+    void handleKeyPress() {
+        var keyPress = keyPresses.poll();
+
+        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
+        // to perform the switch expression coming up.
+        if (keyPress == null) {
+            return;
+        }
+
+        // Let's check up on our keypresses.
+        if (keyPress == KeyCode.SPACE) {
+            this.toggleBoost();
+        } else {
+            // The downward animation doesn't appear to be "stealing" keypresses
+            // from the main one, but we'll leave this in here for now.
+            keyPresses.offer(keyPress);
+        }
     }
 }

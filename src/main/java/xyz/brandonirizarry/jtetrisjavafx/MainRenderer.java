@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -18,7 +19,8 @@ public class MainRenderer {
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
-                    updatePlayerArea(graphicsContext);
+                    this.handleKeyPress();
+                    this.updatePlayerArea(graphicsContext);
 
                     if (game.isGameLost()) {
                         this.animationLoop.pause();
@@ -45,6 +47,25 @@ public class MainRenderer {
                     case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
                 }
             }
+        }
+    }
+
+    void handleKeyPress() {
+        var keyPress = keyPresses.poll();
+
+        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
+        // to perform the switch expression coming up.
+        if (keyPress == null) {
+            return;
+        }
+
+        // Let's check up on our keypresses.
+        switch (keyPress) {
+            case KeyCode.LEFT -> game.moveLeft();
+            case KeyCode.RIGHT -> game.moveRight();
+            case KeyCode.UP -> game.rotateCounterclockwise();
+            case KeyCode.DOWN -> game.rotateClockwise();
+            default -> keyPresses.offer(keyPress);
         }
     }
 }

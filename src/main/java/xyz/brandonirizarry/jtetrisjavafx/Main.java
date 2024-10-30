@@ -1,16 +1,11 @@
 package xyz.brandonirizarry.jtetrisjavafx;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
@@ -33,14 +28,7 @@ public class Main extends Application {
         new MainRenderer(gameGraphicsContext);
 
         // Set up the falling motion as a separate animation loop.
-        var downwardVelocity = new DownwardVelocity(sideGraphicsContext);
-
-        var keyPressAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleKeyPress(keyPresses.poll(), downwardVelocity))
-        );
-
-        keyPressAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        keyPressAnimationLoop.play();
+        new DownwardVelocity(sideGraphicsContext);
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),
@@ -53,23 +41,5 @@ public class Main extends Application {
         primaryStage.show();
 
         game.start();
-    }
-
-    void handleKeyPress(KeyCode keyPress, DownwardVelocity downwardVelocity) {
-        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
-        // to perform the switch expression coming up.
-        if (keyPress == null) {
-            return;
-        }
-
-        // Let's check up on our keypresses.
-        switch (keyPress) {
-            case KeyCode.LEFT -> game.moveLeft();
-            case KeyCode.RIGHT -> game.moveRight();
-            case KeyCode.UP -> game.rotateCounterclockwise();
-            case KeyCode.DOWN -> game.rotateClockwise();
-            case KeyCode.SPACE -> downwardVelocity.toggleBoost();
-            default -> { }
-        }
     }
 }
