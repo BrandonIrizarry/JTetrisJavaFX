@@ -37,7 +37,7 @@ public class Main extends Application {
             if (!globalKeybindingListener.getIsPaused()) {
                 AnimationDriver.keyPresses.add(e.getCode());
             } else if (e.getCode() == KeyCode.P) {
-                globalKeybindingListener.togglePause();
+                AnimationDriver.keyPresses.add(KeyCode.P);
             }
         });
 

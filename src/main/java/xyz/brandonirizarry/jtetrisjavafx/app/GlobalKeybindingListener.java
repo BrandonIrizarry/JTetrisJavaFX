@@ -62,7 +62,7 @@ public class GlobalKeybindingListener implements AnimationDriver {
         return this.isPaused;
     }
 
-    public void togglePause() {
+    private void togglePause() {
         if (this.isPaused) {
             this.drivers.forEach(AnimationDriver::resume);
             this.isPaused = false;
