@@ -18,7 +18,7 @@ import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
  * display, since all game statistics displayed there are updated
  * only whenever a piece lands.
  */
-public class DownwardVelocity {
+public class DownwardVelocity implements AnimationDriver {
     Timeline animationLoop;
     final double initialRate = 1.0/frameRate;
     final double boostedRate = this.initialRate * 20.0;
@@ -28,7 +28,7 @@ public class DownwardVelocity {
 
     DownwardVelocity(GraphicsContext sideGraphicsContext) {
         this.graphicsContext = sideGraphicsContext;
-        this.updateSidebar();
+        this.update();
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
@@ -39,7 +39,7 @@ public class DownwardVelocity {
                         this.animationLoop.setRate(this.currentRate);
                     }
 
-                    this.updateSidebar();
+                    this.update();
                     this.currentRate = (game.getLevel() + 1.0)/frameRate;
                 })
         );
@@ -74,7 +74,8 @@ public class DownwardVelocity {
         }
     }
 
-    void updateSidebar() {
+    @Override
+    public void update() {
         this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
         this.graphicsContext.setFill(Color.PAPAYAWHIP);
         this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
@@ -94,7 +95,8 @@ public class DownwardVelocity {
         this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), 0, 70); // debug
     }
 
-    void handleKeyPress(KeyCode keyPress) {
+    @Override
+    public void handleKeyPress(KeyCode keyPress) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
         if (keyPress == null) {

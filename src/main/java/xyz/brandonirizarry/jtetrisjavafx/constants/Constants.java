@@ -16,8 +16,6 @@ public final class Constants {
     public static final double boardHeight;
     public static final double boardWidth;
     public static final double sideWidth;
-    public static final double frameRate = 30.0;
-    public static final Queue<KeyCode> keyPresses = new ArrayDeque<>();
 
     static {
         game = new Game(numRows, numColumns);

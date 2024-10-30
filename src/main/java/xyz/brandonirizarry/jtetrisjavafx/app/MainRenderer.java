@@ -10,7 +10,7 @@ import javafx.util.Duration;
 
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
-public class MainRenderer {
+public class MainRenderer implements AnimationDriver {
     GraphicsContext graphicsContext;
     Timeline animationLoop;
 
@@ -20,7 +20,7 @@ public class MainRenderer {
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                     this.handleKeyPress(keyPresses.poll());
-                    this.updatePlayerArea(graphicsContext);
+                    this.update();
 
                     if (game.isGameLost()) {
                         this.animationLoop.pause();
@@ -32,10 +32,11 @@ public class MainRenderer {
         this.animationLoop.play();
     }
 
-    void updatePlayerArea(GraphicsContext graphicsContext) {
-        graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-        graphicsContext.setFill(Color.PAPAYAWHIP);
-        graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
+    @Override
+    public void update() {
+        this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
+        this.graphicsContext.setFill(Color.PAPAYAWHIP);
+        this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
 
         var gameState = game.export();
 
@@ -43,14 +44,15 @@ public class MainRenderer {
             for (var columnIndex = 0; columnIndex < numColumns; columnIndex++) {
                 switch (gameState[rowIndex][columnIndex]) {
                     case Empty -> { }
-                    case Tetromino -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.PURPLE);
-                    case Garbage -> drawSquare(graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
+                    case Tetromino -> drawSquare(this.graphicsContext, rowIndex, columnIndex, Color.PURPLE);
+                    case Garbage -> drawSquare(this.graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
                 }
             }
         }
     }
 
-    void handleKeyPress(KeyCode keyPress) {
+    @Override
+    public void handleKeyPress(KeyCode keyPress) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
         if (keyPress == null) {

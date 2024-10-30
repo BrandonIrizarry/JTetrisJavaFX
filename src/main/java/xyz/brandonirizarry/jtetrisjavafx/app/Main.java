@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         var gameCanvas = new Canvas(boardWidth, boardHeight);
         gameCanvas.setFocusTraversable(true);
-        gameCanvas.setOnKeyPressed(e -> keyPresses.add(e.getCode()));
+        gameCanvas.setOnKeyPressed(e -> AnimationDriver.keyPresses.add(e.getCode()));
         var gameGraphicsContext = gameCanvas.getGraphicsContext2D();
 
         var sideCanvas = new Canvas(sideWidth, boardHeight);
