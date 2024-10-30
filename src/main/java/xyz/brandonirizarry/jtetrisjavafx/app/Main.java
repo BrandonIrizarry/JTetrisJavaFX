@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -18,7 +19,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         var gameCanvas = new Canvas(boardWidth, boardHeight);
         gameCanvas.setFocusTraversable(true);
-        gameCanvas.setOnKeyPressed(e -> AnimationDriver.keyPresses.add(e.getCode()));
         var gameGraphicsContext = gameCanvas.getGraphicsContext2D();
 
         var sideCanvas = new Canvas(sideWidth, boardHeight);
@@ -32,7 +32,16 @@ public class Main extends Application {
 
         // Set up a global keybinding listener to handle key events concerning all animations
         // (for example, pausing the game.)
-        new GlobalKeybindingListener(mainRenderer, downwardVelocity);
+        var globalKeybindingListener = new GlobalKeybindingListener(mainRenderer, downwardVelocity);
+        gameCanvas.setOnKeyPressed(e -> {
+            if (!globalKeybindingListener.getIsPaused()) {
+                AnimationDriver.keyPresses.add(e.getCode());
+            } else if (e.getCode() == KeyCode.P) {
+                globalKeybindingListener.togglePause();
+            }
+        });
+
+
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),

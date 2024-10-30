@@ -3,11 +3,9 @@ package xyz.brandonirizarry.jtetrisjavafx.app;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalKeybindingListener implements AnimationDriver {
@@ -60,7 +58,11 @@ public class GlobalKeybindingListener implements AnimationDriver {
     @Override
     public void resume() { }
 
-    private void togglePause() {
+    public boolean getIsPaused() {
+        return this.isPaused;
+    }
+
+    public void togglePause() {
         if (this.isPaused) {
             this.drivers.forEach(AnimationDriver::resume);
             this.isPaused = false;
