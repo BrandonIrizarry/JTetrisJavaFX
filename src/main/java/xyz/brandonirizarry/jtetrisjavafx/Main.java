@@ -156,25 +156,24 @@ class DownwardVelocity {
 
 class MainRenderer {
     GraphicsContext graphicsContext;
+    Timeline animationLoop;
 
     MainRenderer(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
 
         // This will run the 'update' method 30 times per second
-        Timeline[] mainAnimationLoop = new Timeline[1];
-
-        mainAnimationLoop[0] = new Timeline(
+        this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                     updatePlayerArea(graphicsContext);
 
                     if (game.isGameLost()) {
-                        mainAnimationLoop[0].pause();
+                        this.animationLoop.pause();
                     }
                 })
         );
 
-        mainAnimationLoop[0].setCycleCount(Animation.INDEFINITE);
-        mainAnimationLoop[0].play();
+        this.animationLoop.setCycleCount(Animation.INDEFINITE);
+        this.animationLoop.play();
     }
 
     void updatePlayerArea(GraphicsContext graphicsContext) {
