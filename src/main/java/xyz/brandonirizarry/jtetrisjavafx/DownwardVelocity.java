@@ -39,11 +39,17 @@ public class DownwardVelocity {
                         this.animationLoop.setRate(this.currentRate);
                     }
 
-                    this.handleKeyPress();
                     this.updateSidebar();
                     this.currentRate = (game.getLevel() + 1.0)/frameRate;
                 })
         );
+
+        var keyPressLoop = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleKeyPress())
+        );
+
+        keyPressLoop.setCycleCount(Animation.INDEFINITE);
+        keyPressLoop.play();
 
         this.animationLoop.setCycleCount(Animation.INDEFINITE);
         this.animationLoop.setRate(this.currentRate);
