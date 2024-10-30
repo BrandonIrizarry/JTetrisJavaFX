@@ -85,7 +85,7 @@ public class Main extends Application {
  * only whenever a piece lands.
  */
 class DownwardVelocity {
-    final Timeline animationLoop;
+    Timeline animationLoop;
     final double initialRate = 1.0/frameRate;
     final double boostedRate = this.initialRate * 20.0;
     double currentRate = initialRate;
@@ -102,6 +102,7 @@ class DownwardVelocity {
 
                     if (!freeFallInProgress) {
                         this.turnOffBoost();
+                        this.animationLoop.setRate(this.currentRate);
                     }
 
                     this.updateSidebar();
