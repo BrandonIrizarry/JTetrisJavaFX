@@ -112,4 +112,14 @@ public class DownwardVelocity implements AnimationDriver {
             keyPresses.offer(keyPress);
         }
     }
+
+    @Override
+    public void pause() {
+        this.animationLoop.pause();
+    }
+
+    @Override
+    public void resume() {
+        this.animationLoop.play();
+    }
 }

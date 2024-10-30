@@ -25,10 +25,14 @@ public class Main extends Application {
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
 
         // Set up the player-area animation loop and rendering logic.
-        new MainRenderer(gameGraphicsContext);
+        var mainRenderer = new MainRenderer(gameGraphicsContext);
 
         // Set up the falling motion as a separate animation loop.
-        new DownwardVelocity(sideGraphicsContext);
+        var downwardVelocity = new DownwardVelocity(sideGraphicsContext);
+
+        // Set up a global keybinding listener to handle key events concerning all animations
+        // (for example, pausing the game.)
+        new GlobalKeybindingListener(mainRenderer, downwardVelocity);
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),

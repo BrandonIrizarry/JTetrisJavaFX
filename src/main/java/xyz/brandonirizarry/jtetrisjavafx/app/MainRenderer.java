@@ -68,4 +68,14 @@ public class MainRenderer implements AnimationDriver {
             default -> keyPresses.offer(keyPress);
         }
     }
+
+    @Override
+    public void pause() {
+        this.animationLoop.pause();
+    }
+
+    @Override
+    public void resume() {
+        this.animationLoop.play();
+    }
 }

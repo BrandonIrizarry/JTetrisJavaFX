@@ -15,4 +15,6 @@ public interface AnimationDriver {
 
     void handleKeyPress(KeyCode keyPress);
     void update();
+    void pause();
+    void resume();
 }
