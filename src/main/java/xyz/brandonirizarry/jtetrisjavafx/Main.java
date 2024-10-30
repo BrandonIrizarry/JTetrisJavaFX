@@ -13,7 +13,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import xyz.brandonirizarry.jtetris.game.DownwardCollisionType;
 
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
@@ -33,17 +32,25 @@ public class Main extends Application {
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
 
         // This will run the 'update' method 60 times per second
-        var mainAnimationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/30), e -> updatePlayerArea(gameGraphicsContext))
+        Timeline[] mainAnimationLoop = new Timeline[1];
+
+        mainAnimationLoop[0] = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/30), e -> {
+                    updatePlayerArea(gameGraphicsContext);
+
+                    if (game.isGameLost()) {
+                        mainAnimationLoop[0].pause();
+                    }
+                })
         );
 
-        mainAnimationLoop.setCycleCount(Animation.INDEFINITE);
-        mainAnimationLoop.play();
+        mainAnimationLoop[0].setCycleCount(Animation.INDEFINITE);
+        mainAnimationLoop[0].play();
 
         // This sets up the falling motion as a separate animation loop, and
         // configures one for keypresses as well, since many of these affect the
         // downward motion.
-        new DownwardVelocity(mainAnimationLoop, sideGraphicsContext);
+        new DownwardVelocity(sideGraphicsContext);
 
         var splitPane = new SplitPane(
                 new StackPane(gameCanvas),
@@ -98,20 +105,18 @@ class DownwardVelocity {
     double currentRate = initialRate;
     boolean boostOn = false;
 
-    DownwardVelocity(Timeline mainAnimationLoop, GraphicsContext sideGraphicsContext) {
+    DownwardVelocity(GraphicsContext sideGraphicsContext) {
         this.updateSidebar(sideGraphicsContext);
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0), e -> {
-                    var collisionType = game.moveDown();
-                    this.updateSidebar(sideGraphicsContext);
+                    var freeFallInProgress = game.moveDown();
 
-                    if (collisionType == DownwardCollisionType.GameLost) {
-                        mainAnimationLoop.pause();
-                    } else if (collisionType != DownwardCollisionType.FreeFall) {
+                    if (!freeFallInProgress) {
                         this.turnOffBoost();
                     }
 
+                    this.updateSidebar(sideGraphicsContext);
                     this.currentRate = game.getLevel() + 0.5;
                 })
         );
