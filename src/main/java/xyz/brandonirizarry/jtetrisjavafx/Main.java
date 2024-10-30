@@ -86,8 +86,8 @@ public class Main extends Application {
  */
 class DownwardVelocity {
     final Timeline animationLoop;
-    final double initialRate = 1.0;
-    final double boostedRate = 20.0;
+    final double initialRate = 1.0/frameRate;
+    final double boostedRate = this.initialRate * 20.0;
     double currentRate = initialRate;
     boolean boostOn = false;
     GraphicsContext graphicsContext;
@@ -97,7 +97,7 @@ class DownwardVelocity {
         this.updateSidebar();
 
         this.animationLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0), e -> {
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                     var freeFallInProgress = game.moveDown();
 
                     if (!freeFallInProgress) {
@@ -105,7 +105,7 @@ class DownwardVelocity {
                     }
 
                     this.updateSidebar();
-                    this.currentRate = game.getLevel() + 0.5;
+                    this.currentRate = (game.getLevel() + 1.0)/frameRate;
                 })
         );
 
