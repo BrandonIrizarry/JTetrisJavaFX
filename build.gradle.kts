@@ -14,7 +14,7 @@ repositories {
 }
 
 application {
-    mainClass = "xyz.brandonirizarry.jtetrisjavafx.Main"
+    mainClass = "xyz.brandonirizarry.jtetrisjavafx.app.Main"
     mainModule = "xyz.brandonirizarry.JTetrisJavaFX"
 }
 

@@ -1,4 +1,4 @@
-package xyz.brandonirizarry.jtetrisjavafx;
+package xyz.brandonirizarry.jtetrisjavafx.app;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

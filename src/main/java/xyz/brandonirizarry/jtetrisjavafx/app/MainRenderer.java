@@ -1,4 +1,4 @@
-package xyz.brandonirizarry.jtetrisjavafx;
+package xyz.brandonirizarry.jtetrisjavafx.app;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
