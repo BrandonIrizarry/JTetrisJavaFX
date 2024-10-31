@@ -12,6 +12,7 @@ public final class Constants {
     public static final double boardHeight;
     public static final double boardWidth;
     public static final double sideWidth;
+    public static final double textMargin = 10.0;
 
     static {
         game = new Game(numRows, numColumns);

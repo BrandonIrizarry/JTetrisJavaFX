@@ -95,13 +95,13 @@ public class DownwardVelocity implements AnimationDriver {
         this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), 0, 70); // debug
 
         // Display available keybindings.
-        this.graphicsContext.fillText("left: left-arrow", 10, 200);
-        this.graphicsContext.fillText("right: right-arrow", 10, 220);
-        this.graphicsContext.fillText("rotate counterclockwise: up-arrow", 10, 240);
-        this.graphicsContext.fillText("rotate clockwise: down-arrow", 10, 260);
-        this.graphicsContext.fillText("toggle fast-drop: spacebar", 10, 280);
-        this.graphicsContext.fillText("pause game: p", 10, 300);
-        this.graphicsContext.fillText("quit game: q", 10, 320);
+        this.graphicsContext.fillText("left: left-arrow", textMargin, 200);
+        this.graphicsContext.fillText("right: right-arrow", textMargin, 220);
+        this.graphicsContext.fillText("rotate counterclockwise: up-arrow", textMargin, 240);
+        this.graphicsContext.fillText("rotate clockwise: down-arrow", textMargin, 260);
+        this.graphicsContext.fillText("toggle fast-drop: spacebar", textMargin, 280);
+        this.graphicsContext.fillText("pause game: p", textMargin, 300);
+        this.graphicsContext.fillText("quit game: q", textMargin, 320);
     }
 
     @Override
