@@ -37,6 +37,7 @@ public class GlobalKeybindingListener implements AnimationDriver {
         // Let's check up on our keypresses.
         switch (keyPress) {
             case KeyCode.P -> this.togglePause();
+            case KeyCode.Q -> this.stopEverything();
             default -> keyPresses.offer(keyPress);
         }
     }
@@ -70,5 +71,10 @@ public class GlobalKeybindingListener implements AnimationDriver {
             this.drivers.forEach(AnimationDriver::pause);
             this.isPaused = true;
         }
+    }
+
+    private void stopEverything() {
+        this.drivers.forEach(AnimationDriver::pause);
+        this.animationLoop.pause();
     }
 }

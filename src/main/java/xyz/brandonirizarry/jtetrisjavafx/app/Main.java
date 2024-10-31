@@ -36,8 +36,8 @@ public class Main extends Application {
         gameCanvas.setOnKeyPressed(e -> {
             if (!globalKeybindingListener.getIsPaused()) {
                 AnimationDriver.keyPresses.add(e.getCode());
-            } else if (e.getCode() == KeyCode.P) {
-                AnimationDriver.keyPresses.add(KeyCode.P);
+            } else if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.Q) {
+                AnimationDriver.keyPresses.add(e.getCode());
             }
         });
 
