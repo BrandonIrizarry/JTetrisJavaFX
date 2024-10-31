@@ -89,10 +89,10 @@ public class DownwardVelocity implements AnimationDriver {
         var numLinesClearedText = "Lines cleared: %d".formatted(numLinesCleared);
 
         this.graphicsContext.setFill(Color.BLACK);
-        this.graphicsContext.fillText(scoreText, textMargin, 10);
-        this.graphicsContext.fillText(levelText, textMargin, 30);
-        this.graphicsContext.fillText(numLinesClearedText, textMargin, 50);
-        this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), textMargin, 70); // debug
+        this.graphicsContext.fillText(scoreText, textMargin, 10 + textMargin);
+        this.graphicsContext.fillText(levelText, textMargin, 30 + textMargin);
+        this.graphicsContext.fillText(numLinesClearedText, textMargin, 50 + textMargin);
+        this.graphicsContext.fillText("Rate: %f".formatted(this.currentRate), textMargin, 70 + textMargin); // debug
 
         // Display available keybindings.
         this.graphicsContext.fillText("left: left-arrow", textMargin, 200);
