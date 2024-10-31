@@ -21,7 +21,7 @@ public final class Constants {
         game = new Game(numRows, numColumns);
         boardHeight = numRows * squareUnit;
         boardWidth = numColumns * squareUnit;
-        sideWidth = boardWidth * 0.66;
+        sideWidth = boardWidth;
     }
 
     public static void drawSquare(GraphicsContext graphicsContext, int rowIndex, int columnIndex, Color color) {
