@@ -59,7 +59,7 @@ public class MainRenderer implements AnimationDriver {
                 switch (gameState[rowIndex][columnIndex]) {
                     case Empty -> { }
                     case Tetromino -> drawSquare(this.graphicsContext, rowIndex, columnIndex, Color.PURPLE);
-                    case Garbage -> drawSquare(this.graphicsContext, rowIndex, columnIndex, Color.DARKGRAY);
+                    case Garbage -> drawSquare(this.graphicsContext, rowIndex, columnIndex, Color.GREEN);
                 }
             }
         }
