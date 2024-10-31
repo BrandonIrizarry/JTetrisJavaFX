@@ -41,7 +41,8 @@ public class DownwardVelocity implements AnimationDriver {
                             this.animationLoop.setRate(this.currentRate);
                         }
                     } else {
-                        this.currentRate = (game.getLevel() + 1.0)/frameRate;
+                        var level = game.getLevel();
+                        this.currentRate = ((level + 1.0) * 0.25)/frameRate;
                         this.turnOffBoost();
                     }
 
