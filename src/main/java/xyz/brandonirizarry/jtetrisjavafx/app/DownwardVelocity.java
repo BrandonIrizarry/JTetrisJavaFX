@@ -35,13 +35,17 @@ public class DownwardVelocity implements AnimationDriver {
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                     var freeFallInProgress = game.moveDown();
 
-                    if (!freeFallInProgress) {
+                    if (boostOn) {
+                        if (!freeFallInProgress) {
+                            this.turnOffBoost();
+                            this.animationLoop.setRate(this.currentRate);
+                        }
+                    } else {
+                        this.currentRate = (game.getLevel() + 1.0)/frameRate;
                         this.turnOffBoost();
-                        this.animationLoop.setRate(this.currentRate);
                     }
 
                     this.update();
-                    this.currentRate = (game.getLevel() + 1.0)/frameRate;
                 })
         );
 
