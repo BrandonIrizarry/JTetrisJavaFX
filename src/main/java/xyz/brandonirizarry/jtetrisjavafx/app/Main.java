@@ -35,8 +35,11 @@ public class Main extends Application {
         var globalKeybindingListener = new GlobalKeybindingListener(mainRenderer, downwardVelocity);
         gameCanvas.setOnKeyPressed(e -> {
             if (!globalKeybindingListener.getIsPaused()) {
+                // If the game is paused, don't accept any keypresses, except for
+                // a few specific ones (see below.)
                 AnimationDriver.keyPresses.add(e.getCode());
             } else if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.Q) {
+                // These keycodes are enabled whether or not the game is paused.
                 AnimationDriver.keyPresses.add(e.getCode());
             }
         });
