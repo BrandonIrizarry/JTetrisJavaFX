@@ -35,9 +35,10 @@ public class GlobalKeybindingListener implements AnimationDriver {
         }
 
         // Let's check up on our keypresses.
-        switch (keyPress) {
-            case KeyCode.P -> this.togglePause();
-            default -> keyPresses.offer(keyPress);
+        if (keyPress == KeyCode.P) {
+            this.togglePause();
+        } else {
+            keyPresses.offer(keyPress);
         }
     }
 
