@@ -10,10 +10,12 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import xyz.brandonirizarry.jtetris.game.Game;
 
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
 public class Main extends Application {
+    public static Game game;
     public static void main(String[] args) {
         launch(args);
     }
@@ -26,6 +28,13 @@ public class Main extends Application {
 
         var sideCanvas = new Canvas(sideWidth, boardHeight);
         var sideGraphicsContext = sideCanvas.getGraphicsContext2D();
+
+        var startingLevel = getStartingLevelFromUser();
+
+        // Important: this needs to be called before any of the animations are
+        // started, since they use the game state in their logic, which could include
+        // a preconfigured level setting.
+        Main.game = new Game(numRows, numColumns, startingLevel);
 
         // Set up the player-area animation loop and rendering logic.
         var mainRenderer = new MainRenderer(gameGraphicsContext);
@@ -53,8 +62,6 @@ public class Main extends Application {
                 new StackPane(gameCanvas),
                 new StackPane(sideCanvas)
         );
-
-        var startingLevel = getStartingLevelFromUser();
 
         var scene = new Scene(splitPane, boardWidth + sideWidth, boardHeight);
         primaryStage.setScene(scene);

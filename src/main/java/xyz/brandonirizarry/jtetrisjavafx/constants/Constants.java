@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import xyz.brandonirizarry.jtetris.game.Game;
 
 public final class Constants {
-    public static final Game game;
     public static final int numRows = 20;
     public static final int numColumns = 10;
     public static final double squareUnit = 25.0;
@@ -15,7 +14,6 @@ public final class Constants {
     public static final double textMargin = 10.0;
 
     static {
-        game = new Game(numRows, numColumns);
         boardHeight = numRows * squareUnit;
         boardWidth = numColumns * squareUnit + textMargin;
         sideWidth = boardWidth;
