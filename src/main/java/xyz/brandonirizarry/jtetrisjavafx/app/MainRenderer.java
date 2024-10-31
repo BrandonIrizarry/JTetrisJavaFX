@@ -49,6 +49,9 @@ public class MainRenderer implements AnimationDriver {
         this.graphicsContext.setFill(Color.PAPAYAWHIP);
         this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
 
+        this.graphicsContext.setFill(Color.DARKGRAY);
+        this.graphicsContext.fillRect(boardWidth - textMargin, 0, textMargin, boardHeight);
+
         var gameState = game.export();
 
         for (var rowIndex = 0; rowIndex < numRows; rowIndex++ ) {
