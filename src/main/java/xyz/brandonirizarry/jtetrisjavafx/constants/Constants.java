@@ -1,12 +1,8 @@
 package xyz.brandonirizarry.jtetrisjavafx.constants;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import xyz.brandonirizarry.jtetris.game.Game;
-
-import java.util.ArrayDeque;
-import java.util.Queue;
 
 public final class Constants {
     public static final Game game;
