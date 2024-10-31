@@ -3,7 +3,10 @@ package xyz.brandonirizarry.jtetrisjavafx.app;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -51,11 +54,38 @@ public class Main extends Application {
                 new StackPane(sideCanvas)
         );
 
+        var startingLevel = getStartingLevelFromUser();
+
         var scene = new Scene(splitPane, boardWidth + sideWidth, boardHeight);
         primaryStage.setScene(scene);
         primaryStage.setTitle("JTetris");
         primaryStage.show();
 
         game.start();
+    }
+
+    private int getStartingLevelFromUser() {
+        var dialog = new TextInputDialog();
+
+        dialog.setTitle("JTetrisFX");
+        dialog.setHeaderText("Choose your starting level (1-10)");
+
+        var levelSelection = dialog.showAndWait().orElse("0");
+
+        if (levelSelection.isEmpty()) {
+            levelSelection = "0";
+        }
+
+        var level = Integer.parseInt(levelSelection);
+
+        if (level < 0 || level > 10) {
+            var alerter = new Alert(Alert.AlertType.INFORMATION, "Game will start at level 0", ButtonType.OK);
+            alerter.setHeaderText("Invalid level");
+            alerter.showAndWait();
+
+            level = 0;
+        }
+
+        return level;
     }
 }
