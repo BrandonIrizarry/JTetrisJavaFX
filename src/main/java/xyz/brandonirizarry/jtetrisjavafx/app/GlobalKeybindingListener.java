@@ -72,9 +72,4 @@ public class GlobalKeybindingListener implements AnimationDriver {
             this.isPaused = true;
         }
     }
-
-    private void stopEverything() {
-        this.drivers.forEach(AnimationDriver::pause);
-        this.animationLoop.pause();
-    }
 }
