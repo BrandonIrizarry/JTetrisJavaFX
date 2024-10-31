@@ -121,5 +121,6 @@ public class DownwardVelocity implements AnimationDriver {
     @Override
     public void resume() {
         this.animationLoop.play();
+        this.turnOffBoost();
     }
 }
