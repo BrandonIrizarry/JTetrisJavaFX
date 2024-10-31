@@ -13,6 +13,7 @@ import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 public class MainRenderer implements AnimationDriver {
     GraphicsContext graphicsContext;
     Timeline animationLoop;
+    private boolean isQuit = false;
 
     MainRenderer(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
@@ -22,8 +23,18 @@ public class MainRenderer implements AnimationDriver {
                     this.handleKeyPress(keyPresses.poll());
                     this.update();
 
-                    if (game.isGameLost()) {
+                    if (game.isGameLost() || this.isQuit) {
                         this.animationLoop.pause();
+
+                        this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
+                        this.graphicsContext.setFill(Color.PAPAYAWHIP);
+                        this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
+
+                        var gameOverMessage = "Game Over";
+                        this.graphicsContext.setFill(Color.BLACK);
+                        this.graphicsContext.fillText(
+                                gameOverMessage, boardWidth / 2 - gameOverMessage.length() * 3, boardHeight / 2
+                        );
                     }
                 })
         );
@@ -65,6 +76,7 @@ public class MainRenderer implements AnimationDriver {
             case KeyCode.RIGHT -> game.moveRight();
             case KeyCode.UP -> game.rotateCounterclockwise();
             case KeyCode.DOWN -> game.rotateClockwise();
+            case KeyCode.Q -> this.isQuit = true;
             default -> keyPresses.offer(keyPress);
         }
     }
