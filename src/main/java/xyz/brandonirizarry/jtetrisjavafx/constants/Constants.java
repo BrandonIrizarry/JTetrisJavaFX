@@ -17,7 +17,7 @@ public final class Constants {
     static {
         game = new Game(numRows, numColumns);
         boardHeight = numRows * squareUnit;
-        boardWidth = numColumns * squareUnit;
+        boardWidth = numColumns * squareUnit + textMargin;
         sideWidth = boardWidth;
     }
 
