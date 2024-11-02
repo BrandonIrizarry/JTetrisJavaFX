@@ -18,7 +18,6 @@ public class MainRenderer extends AnimationDriver {
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
-                    this.handleGameSignal(gameSignals.poll());
                     this.update();
 
                     if (game.isGameLost() || isQuit) {
@@ -29,6 +28,13 @@ public class MainRenderer extends AnimationDriver {
 
         this.animationLoop.setCycleCount(Animation.INDEFINITE);
         this.animationLoop.play();
+
+        var signalListener = new Timeline(
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleGameSignal(gameSignals.poll()))
+        );
+
+        signalListener.setCycleCount(Animation.INDEFINITE);
+        signalListener.play();
     }
 
     @Override
@@ -68,6 +74,7 @@ public class MainRenderer extends AnimationDriver {
             case ROTATE_COUNTERCLOCKWISE -> game.rotateCounterclockwise();
             case ROTATE_CLOCKWISE -> game.rotateClockwise();
             case QUIT -> this.isQuit = true;
+            case TOGGLE_PAUSE -> this.togglePause();
             default -> gameSignals.offer(gameSignal);
         }
     }
