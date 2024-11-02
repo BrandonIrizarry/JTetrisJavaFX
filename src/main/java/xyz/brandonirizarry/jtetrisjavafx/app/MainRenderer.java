@@ -11,6 +11,8 @@ import static xyz.brandonirizarry.jtetrisjavafx.app.Main.game;
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
 public class MainRenderer extends AnimationDriver {
+    private boolean isQuit = false;
+
     MainRenderer(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
 
@@ -19,7 +21,7 @@ public class MainRenderer extends AnimationDriver {
                     this.handleGameSignal(gameSignals.poll());
                     this.update();
 
-                    if (game.isGameLost()) {
+                    if (game.isGameLost() || isQuit) {
                         this.onQuit();
                     }
                 })
@@ -65,7 +67,7 @@ public class MainRenderer extends AnimationDriver {
             case MOVE_RIGHT -> game.moveRight();
             case ROTATE_COUNTERCLOCKWISE -> game.rotateCounterclockwise();
             case ROTATE_CLOCKWISE -> game.rotateClockwise();
-            case QUIT -> this.onQuit();
+            case QUIT -> this.isQuit = true;
             default -> gameSignals.offer(gameSignal);
         }
     }
