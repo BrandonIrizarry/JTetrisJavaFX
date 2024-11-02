@@ -37,25 +37,25 @@ public class Main extends Application {
         Main.game = new Game(numRows, numColumns, startingLevel);
 
         // Set up the player-area animation loop and rendering logic.
-        var mainRenderer = new MainRenderer(gameGraphicsContext);
+        new MainRenderer(gameGraphicsContext);
 
         // Set up the falling motion as a separate animation loop.
-        var downwardVelocity = new DownwardVelocity(sideGraphicsContext);
+        new DownwardVelocity(sideGraphicsContext);
 
-        // Set up a global keybinding listener to handle key events concerning all animations
-        // (for example, pausing the game.)
-        var globalKeybindingListener = new GlobalKeybindingListener(mainRenderer, downwardVelocity);
         gameCanvas.setOnKeyPressed(e -> {
-            if (!globalKeybindingListener.getIsPaused()) {
-                // If the game is paused, don't accept any keypresses, except for
-                // a few specific ones (see below.)
-                AnimationDriver.keyPresses.add(e.getCode());
-            } else if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.Q) {
-                // These keycodes are enabled whether or not the game is paused.
-                AnimationDriver.keyPresses.add(e.getCode());
-            }
-        });
+            var signal = switch (e.getCode()) {
+                case KeyCode.P -> GameSignal.TOGGLE_PAUSE;
+                case KeyCode.Q -> GameSignal.QUIT;
+                case KeyCode.LEFT -> GameSignal.MOVE_LEFT;
+                case KeyCode.RIGHT -> GameSignal.MOVE_RIGHT;
+                case KeyCode.UP -> GameSignal.ROTATE_COUNTERCLOCKWISE;
+                case KeyCode.DOWN -> GameSignal.ROTATE_CLOCKWISE;
+                case KeyCode.SPACE -> GameSignal.TOGGLE_BOOST;
+                default -> GameSignal.NONE;
+            };
 
+            AnimationDriver.gameSignals.add(signal);
+        });
 
 
         var splitPane = new SplitPane(

@@ -4,7 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -19,13 +18,11 @@ import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
  * display, since all game statistics displayed there are updated
  * only whenever a piece lands.
  */
-public class DownwardVelocity implements AnimationDriver {
-    Timeline animationLoop;
-    final double initialRate = 1.0/frameRate;
-    final double boostedRate = this.initialRate * 20.0;
-    double currentRate = initialRate;
-    boolean boostOn = false;
-    GraphicsContext graphicsContext;
+public class DownwardVelocity extends AnimationDriver {
+    private final double initialRate = 1.0/frameRate;
+    private final double boostedRate = this.initialRate * 20.0;
+    private double currentRate = initialRate;
+    private boolean boostOn = false;
 
     DownwardVelocity(GraphicsContext sideGraphicsContext) {
         this.graphicsContext = sideGraphicsContext;
@@ -51,7 +48,7 @@ public class DownwardVelocity implements AnimationDriver {
         );
 
         var keyPressLoop = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleKeyPress(keyPresses.poll()))
+                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleGameSignal(gameSignals.poll()))
         );
 
         keyPressLoop.setCycleCount(Animation.INDEFINITE);
@@ -62,26 +59,8 @@ public class DownwardVelocity implements AnimationDriver {
         this.animationLoop.play();
     }
 
-    private void turnOnBoost() {
-        this.animationLoop.setRate(this.boostedRate);
-        boostOn = true;
-    }
-
-    private void turnOffBoost() {
-        this.animationLoop.setRate(this.currentRate);
-        boostOn = false;
-    }
-
-    void toggleBoost() {
-        if (boostOn) {
-            this.turnOffBoost();
-        } else {
-            this.turnOnBoost();
-        }
-    }
-
     @Override
-    public void update() {
+    protected void update() {
         this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
         this.graphicsContext.setFill(Color.PAPAYAWHIP);
         this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
@@ -111,31 +90,50 @@ public class DownwardVelocity implements AnimationDriver {
     }
 
     @Override
-    public void handleKeyPress(KeyCode keyPress) {
+    protected void handleGameSignal(GameSignal gameSignal) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
-        if (keyPress == null) {
+        if (gameSignal == null) {
             return;
         }
 
-        // Let's check up on our keypresses.
-        if (keyPress == KeyCode.SPACE) {
-            this.toggleBoost();
-        } else {
-            // The downward animation doesn't appear to be "stealing" keypresses
-            // from the main one, but we'll leave this in here for now.
-            keyPresses.offer(keyPress);
+        switch (gameSignal) {
+            case TOGGLE_PAUSE -> this.togglePause();
+            case QUIT -> this.pause();
+            case TOGGLE_BOOST -> this.toggleBoost();
+            default -> gameSignals.offer(gameSignal);
         }
     }
 
     @Override
-    public void pause() {
+    protected void pause() {
         this.animationLoop.pause();
     }
 
     @Override
-    public void resume() {
+    protected void resume() {
         this.animationLoop.play();
         this.turnOffBoost();
+    }
+
+    @Override
+    protected void onQuit() { }
+
+    private void turnOnBoost() {
+        this.animationLoop.setRate(this.boostedRate);
+        boostOn = true;
+    }
+
+    private void turnOffBoost() {
+        this.animationLoop.setRate(this.currentRate);
+        boostOn = false;
+    }
+
+    private void toggleBoost() {
+        if (boostOn) {
+            this.turnOffBoost();
+        } else {
+            this.turnOnBoost();
+        }
     }
 }

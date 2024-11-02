@@ -1,6 +1,7 @@
 package xyz.brandonirizarry.jtetrisjavafx.app;
 
-import javafx.scene.input.KeyCode;
+import javafx.animation.Timeline;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -9,12 +10,28 @@ import java.util.Queue;
  * An interface to factor out some commonality between the various animations
  * our game uses.
  */
-public interface AnimationDriver {
-    Queue<KeyCode> keyPresses = new ArrayDeque<>();
-    double frameRate = 30.0;
+public abstract class AnimationDriver {
+    public static final Queue<GameSignal> gameSignals = new ArrayDeque<>();
 
-    void handleKeyPress(KeyCode keyPress);
-    void update();
-    void pause();
-    void resume();
+    protected static final double frameRate = 30.0;
+    protected GraphicsContext graphicsContext;
+    protected Timeline animationLoop;
+
+    private boolean isPaused = false;
+
+    public void togglePause() {
+        if (this.isPaused) {
+            this.resume();
+        } else {
+            this.pause();
+        }
+
+        this.isPaused = !this.isPaused;
+    }
+
+    abstract protected void handleGameSignal(GameSignal gameSignal);
+    abstract protected void update();
+    abstract protected void resume();
+    abstract protected void pause();
+    abstract protected void onQuit();
 }

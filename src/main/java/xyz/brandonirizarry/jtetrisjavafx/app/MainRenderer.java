@@ -4,38 +4,25 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import static xyz.brandonirizarry.jtetrisjavafx.app.Main.game;
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 
-public class MainRenderer implements AnimationDriver {
-    GraphicsContext graphicsContext;
+public class MainRenderer extends AnimationDriver {
     Timeline animationLoop;
-    private boolean isQuit = false;
 
     MainRenderer(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
 
         this.animationLoop = new Timeline(
                 new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
-                    this.handleKeyPress(keyPresses.poll());
+                    this.handleGameSignal(gameSignals.poll());
                     this.update();
 
-                    if (game.isGameLost() || this.isQuit) {
-                        this.animationLoop.pause();
-
-                        this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
-                        this.graphicsContext.setFill(Color.PAPAYAWHIP);
-                        this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
-
-                        var gameOverMessage = "Game Over";
-                        this.graphicsContext.setFill(Color.BLACK);
-                        this.graphicsContext.fillText(
-                                gameOverMessage, boardWidth / 2 - gameOverMessage.length() * 3, boardHeight / 2
-                        );
+                    if (game.isGameLost()) {
+                        this.onQuit();
                     }
                 })
         );
@@ -67,31 +54,46 @@ public class MainRenderer implements AnimationDriver {
     }
 
     @Override
-    public void handleKeyPress(KeyCode keyPress) {
+    public void handleGameSignal(GameSignal gameSignal) {
         // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
         // to perform the switch expression coming up.
-        if (keyPress == null) {
+        if (gameSignal == null) {
             return;
         }
 
         // Let's check up on our keypresses.
-        switch (keyPress) {
-            case KeyCode.LEFT -> game.moveLeft();
-            case KeyCode.RIGHT -> game.moveRight();
-            case KeyCode.UP -> game.rotateCounterclockwise();
-            case KeyCode.DOWN -> game.rotateClockwise();
-            case KeyCode.Q -> this.isQuit = true;
-            default -> keyPresses.offer(keyPress);
+        switch (gameSignal) {
+            case MOVE_LEFT -> game.moveLeft();
+            case MOVE_RIGHT -> game.moveRight();
+            case ROTATE_COUNTERCLOCKWISE -> game.rotateCounterclockwise();
+            case ROTATE_CLOCKWISE -> game.rotateClockwise();
+            case QUIT -> this.onQuit();
+            default -> gameSignals.offer(gameSignal);
         }
     }
 
     @Override
-    public void pause() {
+    protected void pause() {
         this.animationLoop.pause();
     }
 
     @Override
-    public void resume() {
+    protected void resume() {
         this.animationLoop.play();
+    }
+
+    @Override
+    protected void onQuit() {
+        this.pause();
+
+        this.graphicsContext.clearRect(0, 0, boardWidth, boardHeight);
+        this.graphicsContext.setFill(Color.PAPAYAWHIP);
+        this.graphicsContext.fillRect(0, 0, boardWidth, boardHeight);
+
+        var gameOverMessage = "Game Over";
+        this.graphicsContext.setFill(Color.BLACK);
+        this.graphicsContext.fillText(
+                gameOverMessage, boardWidth / 2 - gameOverMessage.length() * 3, boardHeight / 2
+        );
     }
 }
