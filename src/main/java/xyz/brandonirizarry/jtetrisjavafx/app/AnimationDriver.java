@@ -19,7 +19,7 @@ public abstract class AnimationDriver {
 
     private boolean isPaused = false;
 
-    public void togglePause() {
+    protected void togglePause() {
         if (this.isPaused) {
             this.resume();
         } else {
