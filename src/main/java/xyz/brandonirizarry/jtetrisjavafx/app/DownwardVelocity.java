@@ -47,18 +47,6 @@ public class DownwardVelocity extends AnimationDriver {
                 })
         );
 
-        // Using a separate animation loop, dedicated to signal-listening,
-        // decouples the responsiveness of the player's keypresses from the
-        // animation rate itself. This is needed because the move-down animation rate can be
-        // slow sometimes (for example, the player is at level 0); or else, it varies
-        // depending on the user's current level, which isn't ideal for keypress responsiveness.
-        var signalListener = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleGameSignal(gameSignals.poll()))
-        );
-
-        signalListener.setCycleCount(Animation.INDEFINITE);
-        signalListener.play();
-
         this.animationLoop.setCycleCount(Animation.INDEFINITE);
         this.animationLoop.setRate(this.currentRate);
         this.animationLoop.play();

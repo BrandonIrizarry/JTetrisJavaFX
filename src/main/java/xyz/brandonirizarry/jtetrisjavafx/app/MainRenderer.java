@@ -28,13 +28,6 @@ public class MainRenderer extends AnimationDriver {
 
         this.animationLoop.setCycleCount(Animation.INDEFINITE);
         this.animationLoop.play();
-
-        var signalListener = new Timeline(
-                new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleGameSignal(gameSignals.poll()))
-        );
-
-        signalListener.setCycleCount(Animation.INDEFINITE);
-        signalListener.play();
     }
 
     @Override

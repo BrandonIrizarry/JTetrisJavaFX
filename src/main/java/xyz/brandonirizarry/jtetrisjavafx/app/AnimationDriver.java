@@ -1,7 +1,10 @@
 package xyz.brandonirizarry.jtetrisjavafx.app;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.util.Duration;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -16,6 +19,9 @@ public abstract class AnimationDriver {
     protected static final double frameRate = 30.0;
     protected GraphicsContext graphicsContext;
     protected Timeline animationLoop;
+    protected Timeline signalListener = new Timeline(
+            new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleGameSignal(gameSignals.poll()))
+    );
 
     private boolean isPaused = false;
 
@@ -34,4 +40,9 @@ public abstract class AnimationDriver {
     abstract protected void resume();
     abstract protected void pause();
     abstract protected void onQuit();
+
+    {
+        this.signalListener.setCycleCount(Animation.INDEFINITE);
+        this.signalListener.play();
+    }
 }
