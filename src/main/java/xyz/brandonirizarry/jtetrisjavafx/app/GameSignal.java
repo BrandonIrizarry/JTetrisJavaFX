@@ -25,10 +25,13 @@ public sealed interface GameSignal {
     }
 
     record Quit() implements GameSignal { }
-    record MoveLeft() implements GameSignal { }
-    record MoveRight() implements GameSignal { }
-    record RotateCounterclockwise() implements GameSignal { }
-    record RotateClockwise() implements GameSignal { }
     record ToggleBoost() implements GameSignal { }
     record None() implements GameSignal { }
+
+    sealed interface UserMotion extends GameSignal {
+        record MoveLeft() implements UserMotion { }
+        record MoveRight() implements UserMotion { }
+        record RotateCounterclockwise() implements UserMotion { }
+        record RotateClockwise() implements UserMotion { }
+    }
 }

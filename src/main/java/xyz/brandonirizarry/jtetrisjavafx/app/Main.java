@@ -46,10 +46,10 @@ public class Main extends Application {
             var signal = switch (e.getCode()) {
                 case KeyCode.P -> new GameSignal.TogglePause(AnimationDriver.getNumAnimations());
                 case KeyCode.Q -> new GameSignal.Quit();
-                case KeyCode.LEFT -> new GameSignal.MoveLeft();
-                case KeyCode.RIGHT -> new GameSignal.MoveRight();
-                case KeyCode.UP -> new GameSignal.RotateCounterclockwise();
-                case KeyCode.DOWN -> new GameSignal.RotateClockwise();
+                case KeyCode.LEFT -> new GameSignal.UserMotion.MoveLeft();
+                case KeyCode.RIGHT -> new GameSignal.UserMotion.MoveRight();
+                case KeyCode.UP -> new GameSignal.UserMotion.RotateCounterclockwise();
+                case KeyCode.DOWN -> new GameSignal.UserMotion.RotateClockwise();
                 case KeyCode.SPACE -> new GameSignal.ToggleBoost();
                 default -> new GameSignal.None();
             };

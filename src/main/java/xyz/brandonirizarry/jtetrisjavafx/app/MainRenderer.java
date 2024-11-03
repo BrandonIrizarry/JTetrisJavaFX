@@ -62,10 +62,10 @@ public class MainRenderer extends AnimationDriver {
 
         // Let's check up on our keypresses.
         switch (gameSignal) {
-            case GameSignal.MoveLeft() -> game.moveLeft();
-            case GameSignal.MoveRight() -> game.moveRight();
-            case GameSignal.RotateCounterclockwise() -> game.rotateCounterclockwise();
-            case GameSignal.RotateClockwise() -> game.rotateClockwise();
+            case GameSignal.UserMotion.MoveLeft() -> game.moveLeft();
+            case GameSignal.UserMotion.MoveRight() -> game.moveRight();
+            case GameSignal.UserMotion.RotateCounterclockwise() -> game.rotateCounterclockwise();
+            case GameSignal.UserMotion.RotateClockwise() -> game.rotateClockwise();
             case GameSignal.Quit() -> this.isQuit = true;
             case GameSignal.TogglePause tp -> this.togglePause(tp);
             default -> gameSignals.offer(gameSignal);
