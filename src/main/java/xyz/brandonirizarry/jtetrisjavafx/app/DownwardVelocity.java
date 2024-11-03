@@ -91,13 +91,7 @@ public class DownwardVelocity extends AnimationDriver {
         }
 
         switch (gameSignal) {
-            case GameSignal.TogglePause tp -> {
-                if (tp.isExhausted()) break;
-
-                this.togglePause();
-                tp.decrement();
-                gameSignals.offer(tp);
-            }
+            case GameSignal.TogglePause tp -> this.togglePause(tp);
             case GameSignal.Quit() -> this.pause();
             case GameSignal.ToggleBoost() -> this.toggleBoost();
             default -> gameSignals.offer(gameSignal);

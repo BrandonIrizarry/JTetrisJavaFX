@@ -26,7 +26,11 @@ public abstract class AnimationDriver {
 
     private boolean isPaused = false;
 
-    protected void togglePause() {
+    protected void togglePause(GameSignal.TogglePause tp) {
+        // If all animations have consumed a pause signal, this animation shouldn't
+        // react to that signal.
+        if (tp.isExhausted()) return;
+
         if (this.isPaused) {
             this.resume();
         } else {
@@ -34,6 +38,10 @@ public abstract class AnimationDriver {
         }
 
         this.isPaused = !this.isPaused;
+
+        // Mark the fact that this animation has consumed a pause signal.
+        tp.decrement();
+        gameSignals.offer(tp);
     }
 
     public static int getNumAnimations() {
