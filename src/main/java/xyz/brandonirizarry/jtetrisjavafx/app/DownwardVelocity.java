@@ -91,9 +91,9 @@ public class DownwardVelocity extends AnimationDriver {
         }
 
         switch (gameSignal) {
-            case TOGGLE_PAUSE -> this.togglePause();
-            case QUIT -> this.pause();
-            case TOGGLE_BOOST -> this.toggleBoost();
+            case TogglePause -> this.togglePause();
+            case Quit -> this.pause();
+            case ToggleBoost -> this.toggleBoost();
             default -> gameSignals.offer(gameSignal);
         }
     }

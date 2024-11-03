@@ -44,14 +44,14 @@ public class Main extends Application {
 
         gameCanvas.setOnKeyPressed(e -> {
             var signal = switch (e.getCode()) {
-                case KeyCode.P -> GameSignal.TOGGLE_PAUSE;
-                case KeyCode.Q -> GameSignal.QUIT;
-                case KeyCode.LEFT -> GameSignal.MOVE_LEFT;
-                case KeyCode.RIGHT -> GameSignal.MOVE_RIGHT;
-                case KeyCode.UP -> GameSignal.ROTATE_COUNTERCLOCKWISE;
-                case KeyCode.DOWN -> GameSignal.ROTATE_CLOCKWISE;
-                case KeyCode.SPACE -> GameSignal.TOGGLE_BOOST;
-                default -> GameSignal.NONE;
+                case KeyCode.P -> GameSignal.TogglePause;
+                case KeyCode.Q -> GameSignal.Quit;
+                case KeyCode.LEFT -> GameSignal.MoveLeft;
+                case KeyCode.RIGHT -> GameSignal.MoveRight;
+                case KeyCode.UP -> GameSignal.RotateCounterclockwise;
+                case KeyCode.DOWN -> GameSignal.RotateClockwise;
+                case KeyCode.SPACE -> GameSignal.ToggleBoost;
+                default -> GameSignal.None;
             };
 
             AnimationDriver.gameSignals.add(signal);
