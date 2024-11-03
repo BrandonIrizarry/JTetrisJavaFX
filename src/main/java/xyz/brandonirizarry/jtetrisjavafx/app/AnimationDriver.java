@@ -15,6 +15,7 @@ import java.util.Queue;
  */
 public abstract class AnimationDriver {
     public static final Queue<GameSignal> gameSignals = new ArrayDeque<>();
+    private static int numAnimations = 0;
 
     protected static final double frameRate = 30.0;
     protected GraphicsContext graphicsContext;
@@ -35,6 +36,10 @@ public abstract class AnimationDriver {
         this.isPaused = !this.isPaused;
     }
 
+    public static int getNumAnimations() {
+        return numAnimations;
+    }
+
     abstract protected void handleGameSignal(GameSignal gameSignal);
     abstract protected void update();
     abstract protected void resume();
@@ -44,5 +49,6 @@ public abstract class AnimationDriver {
     {
         this.signalListener.setCycleCount(Animation.INDEFINITE);
         this.signalListener.play();
+        numAnimations++;
     }
 }
