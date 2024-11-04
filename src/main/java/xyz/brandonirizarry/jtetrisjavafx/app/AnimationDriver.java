@@ -45,7 +45,13 @@ public abstract class AnimationDriver {
 
         // Mark the fact that this animation has consumed a pause signal.
         tp.decrement();
-        gameSignals.offer(tp);
+
+        // We may as well stop forwarding the signal if the current animation
+        // was the last to consume it: only forward the signal if the
+        // TogglePause object isn't yet exhausted.
+        if (!tp.isExhausted()) {
+            gameSignals.offer(tp);
+        }
     }
 
     public static int getNumAnimations() {
