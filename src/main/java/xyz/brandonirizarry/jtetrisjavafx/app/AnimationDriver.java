@@ -21,7 +21,11 @@ public abstract class AnimationDriver {
     protected GraphicsContext graphicsContext;
     protected Timeline animationLoop;
     protected Timeline signalListener = new Timeline(
-            new KeyFrame(Duration.millis(1000.0/frameRate), e -> handleGameSignal(gameSignals.poll()))
+            new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
+                var signal = gameSignals.poll();
+
+                handleGameSignal(signal);
+            })
     );
 
     private boolean isPaused = false;
