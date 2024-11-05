@@ -64,7 +64,6 @@ public class MainRenderer extends AnimationDriver {
 
         // Let's check up on our keypresses.
         switch (gameSignal) {
-            case null -> { }
             case GameSignal.UserMotion.MoveLeft() -> game.moveLeft();
             case GameSignal.UserMotion.MoveRight() -> game.moveRight();
             case GameSignal.UserMotion.RotateCounterclockwise() -> game.rotateCounterclockwise();

@@ -85,7 +85,6 @@ public class DownwardVelocity extends AnimationDriver {
     @Override
     protected void handleGameSignal(GameSignal gameSignal) {
         switch (gameSignal) {
-            case null -> { }
             case GameSignal.TogglePause tp -> this.togglePause(tp);
             case GameSignal.Quit() -> this.pause();
             case GameSignal.ToggleBoost() -> this.toggleBoost();
