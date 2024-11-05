@@ -30,6 +30,10 @@ public abstract class AnimationDriver {
 
     private boolean paused = false;
 
+    protected boolean isPaused() {
+        return this.paused;
+    }
+
     protected void togglePause(GameSignal.TogglePause tp) {
         // If all animations have consumed a pause signal, this animation shouldn't
         // react to that signal.
