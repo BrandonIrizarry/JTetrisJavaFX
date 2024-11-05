@@ -60,6 +60,14 @@ public class MainRenderer extends AnimationDriver {
             return;
         }
 
+        // The signal listener queues events even while the game is paused.
+        // Hence it's possible for the game state to get updated while the game is
+        // paused, which creates a weird effect after the player unpauses.
+        // This if-statement guards against that.
+        if (gameSignal instanceof GameSignal.UserMotion && this.isPaused()) {
+            return;
+        }
+
         // Let's check up on our keypresses.
         switch (gameSignal) {
             case GameSignal.UserMotion.MoveLeft() -> game.moveLeft();
