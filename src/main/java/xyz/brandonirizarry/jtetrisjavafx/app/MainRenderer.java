@@ -68,7 +68,10 @@ public class MainRenderer extends AnimationDriver {
             case GameSignal.UserMotion.MoveRight() -> game.moveRight();
             case GameSignal.UserMotion.RotateCounterclockwise() -> game.rotateCounterclockwise();
             case GameSignal.UserMotion.RotateClockwise() -> game.rotateClockwise();
-            case GameSignal.Quit() -> this.isQuit = true;
+            case GameSignal.Quit() -> {
+                this.resume();
+                this.isQuit = true;
+            }
             case GameSignal.TogglePause tp -> this.togglePause(tp);
             default -> gameSignals.offer(gameSignal);
         }
