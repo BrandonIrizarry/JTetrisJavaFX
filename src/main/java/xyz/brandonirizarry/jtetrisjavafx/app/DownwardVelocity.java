@@ -84,13 +84,8 @@ public class DownwardVelocity extends AnimationDriver {
 
     @Override
     protected void handleGameSignal(GameSignal gameSignal) {
-        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
-        // to perform the switch expression coming up.
-        if (gameSignal == null) {
-            return;
-        }
-
         switch (gameSignal) {
+            case null -> { }
             case GameSignal.TogglePause tp -> this.togglePause(tp);
             case GameSignal.Quit() -> this.pause();
             case GameSignal.ToggleBoost() -> this.toggleBoost();

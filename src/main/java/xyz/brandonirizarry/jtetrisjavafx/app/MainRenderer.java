@@ -54,12 +54,6 @@ public class MainRenderer extends AnimationDriver {
 
     @Override
     public void handleGameSignal(GameSignal gameSignal) {
-        // Necessary, because the 'ordinal()' method on KeyCode enum is invoked
-        // to perform the switch expression coming up.
-        if (gameSignal == null) {
-            return;
-        }
-
         // The signal listener queues events even while the game is paused.
         // Hence it's possible for the game state to get updated while the game is
         // paused, which creates a weird effect after the player unpauses.
@@ -70,6 +64,7 @@ public class MainRenderer extends AnimationDriver {
 
         // Let's check up on our keypresses.
         switch (gameSignal) {
+            case null -> { }
             case GameSignal.UserMotion.MoveLeft() -> game.moveLeft();
             case GameSignal.UserMotion.MoveRight() -> game.moveRight();
             case GameSignal.UserMotion.RotateCounterclockwise() -> game.rotateCounterclockwise();
