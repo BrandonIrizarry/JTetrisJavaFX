@@ -28,20 +28,20 @@ public abstract class AnimationDriver {
             })
     );
 
-    private boolean isPaused = false;
+    private boolean paused = false;
 
     protected void togglePause(GameSignal.TogglePause tp) {
         // If all animations have consumed a pause signal, this animation shouldn't
         // react to that signal.
         if (tp.isExhausted()) return;
 
-        if (this.isPaused) {
+        if (this.paused) {
             this.resume();
         } else {
             this.pause();
         }
 
-        this.isPaused = !this.isPaused;
+        this.paused = !this.paused;
 
         // Mark the fact that this animation has consumed a pause signal.
         tp.decrement();
