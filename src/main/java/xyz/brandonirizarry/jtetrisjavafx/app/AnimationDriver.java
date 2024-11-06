@@ -15,9 +15,9 @@ import java.util.Queue;
  */
 public abstract class AnimationDriver {
     public static final Queue<GameSignal> gameSignals = new ArrayDeque<>();
+    protected static final double frameRate = 30.0;
     private static int numAnimations = 0;
 
-    protected static final double frameRate = 30.0;
     protected GraphicsContext graphicsContext;
     protected Timeline animationLoop;
     protected Timeline signalListener = new Timeline(
@@ -34,8 +34,21 @@ public abstract class AnimationDriver {
 
     private boolean paused = false;
 
+    public static int getNumAnimations() {
+        return numAnimations;
+    }
+
     protected boolean isPaused() {
         return this.paused;
+    }
+
+    /*
+     * An initializer shared by child animations.
+     */
+    {
+        this.signalListener.setCycleCount(Animation.INDEFINITE);
+        this.signalListener.play();
+        numAnimations++;
     }
 
     protected void togglePause(GameSignal.TogglePause tp) {
@@ -62,16 +75,6 @@ public abstract class AnimationDriver {
         }
     }
 
-    public static int getNumAnimations() {
-        return numAnimations;
-    }
-
-    abstract protected void handleGameSignal(GameSignal gameSignal);
-    abstract protected void update();
-    abstract protected void resume();
-    abstract protected void pause();
-    abstract protected void onQuit();
-
     /**
      * A method to filter out null game signals so that child classes
      * don't need to handle this case.
@@ -85,9 +88,9 @@ public abstract class AnimationDriver {
         this.handleGameSignal(gameSignal);
     }
 
-    {
-        this.signalListener.setCycleCount(Animation.INDEFINITE);
-        this.signalListener.play();
-        numAnimations++;
-    }
+    abstract protected void handleGameSignal(GameSignal gameSignal);
+    abstract protected void update();
+    abstract protected void resume();
+    abstract protected void pause();
+    abstract protected void onQuit();
 }
