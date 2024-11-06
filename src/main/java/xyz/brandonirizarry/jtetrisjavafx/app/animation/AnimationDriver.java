@@ -25,11 +25,9 @@ public abstract class AnimationDriver {
             new KeyFrame(Duration.millis(1000.0/frameRate), e -> {
                 var signal = gameSignals.poll();
 
-                // This function in turn calls the implemented
-                // 'handleGameSignal', but does so while eliminating the
-                // need for the child class to handle the case of a
-                // null signal.
-                this.handlePossiblyNullGameSignal(signal);
+                if (signal == null) return;
+
+                this.handleGameSignal(signal);
             })
     );
 
@@ -74,19 +72,6 @@ public abstract class AnimationDriver {
         if (!tp.isExhausted()) {
             gameSignals.offer(tp);
         }
-    }
-
-    /**
-     * A method to filter out null game signals so that child classes
-     * don't need to handle this case.
-     *
-     * @param gameSignal The game signal as polled directly from the gameSignals queue.
-     *                   Note that it can be possibly null.
-     */
-    private void handlePossiblyNullGameSignal(GameSignal gameSignal) {
-        if (gameSignal == null) return;
-
-        this.handleGameSignal(gameSignal);
     }
 
     abstract protected void handleGameSignal(GameSignal gameSignal);
