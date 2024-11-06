@@ -11,6 +11,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import xyz.brandonirizarry.jtetris.game.Game;
+import xyz.brandonirizarry.jtetrisjavafx.app.animation.AnimationDriver;
+import xyz.brandonirizarry.jtetrisjavafx.app.animation.DownwardVelocity;
+import xyz.brandonirizarry.jtetrisjavafx.app.animation.MainRenderer;
 
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
 

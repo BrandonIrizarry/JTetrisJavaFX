@@ -1,4 +1,4 @@
-package xyz.brandonirizarry.jtetrisjavafx.app;
+package xyz.brandonirizarry.jtetrisjavafx.app.animation;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import xyz.brandonirizarry.jtetrisjavafx.app.GameSignal;
 
 import static xyz.brandonirizarry.jtetrisjavafx.app.Main.game;
 import static xyz.brandonirizarry.jtetrisjavafx.constants.Constants.*;
@@ -24,7 +25,7 @@ public class DownwardVelocity extends AnimationDriver {
     private double currentRate = initialRate;
     private boolean boostOn = false;
 
-    DownwardVelocity(GraphicsContext sideGraphicsContext) {
+    public DownwardVelocity(GraphicsContext sideGraphicsContext) {
         this.graphicsContext = sideGraphicsContext;
         this.update();
 
