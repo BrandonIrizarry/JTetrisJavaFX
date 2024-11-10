@@ -16,6 +16,12 @@ repositories {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
 application {
     mainClass = "xyz.brandonirizarry.jtetrisjavafx.app.Main"
     mainModule = "xyz.brandonirizarry.JTetrisJavaFX"
